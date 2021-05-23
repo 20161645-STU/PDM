@@ -1,120 +1,70 @@
 import React, { Component } from 'react';
-import { Icon, Form, Input,  Select, Button } from 'antd';
+import { Descriptions, Button } from 'antd';
 
-const { Option } = Select;
-class DrawDetil extends Component {
-    comeBack = () => {
-        this.props.history.push('/app/drawing_manage')
+import EditModal from './editModal'
+
+class DrawDetil extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            editModalVisible: false
+        }
     }
+
+    //打开编辑弹窗
+    editDraws = () => {
+        this.setState({
+            editModalVisible: true
+        })
+    }
+
+    //关闭弹窗
+    closeEditModal = () => {
+        this.setState({
+            editModalVisible: false
+        })
+    }
+
     render() {
-        const { getFieldDecorator } = this.props.form;
-
-
         return (
-            <div>
-                <div onClick={this.comeBack}>
-                    <Icon type="arrow-left" />
-                    <span>返回</span>
+            <div style={{margin:'20px'}}>
+                <Descriptions
+                    title="图纸详情"
+                    bordered
+                    column={1}
+                    size={'small'}
+                >
+                    <Descriptions.Item label="图纸编号">325001</Descriptions.Item>
+                    <Descriptions.Item label="图纸名称">机械手臂正视图</Descriptions.Item>
+                    <Descriptions.Item label="图纸版本">AA</Descriptions.Item>
+                    <Descriptions.Item label="创建时间">2021:05:19 11:02</Descriptions.Item>
+                    <Descriptions.Item label="创建人">admin</Descriptions.Item>
+                    <Descriptions.Item label="是否冻结">否</Descriptions.Item>
+                    <Descriptions.Item label="是否审查">否</Descriptions.Item>
+                    <Descriptions.Item label="流程状态">发放</Descriptions.Item>
+                    {/* <Descriptions.Item label="所属零件">机械手臂</Descriptions.Item> */}
+                    <Descriptions.Item label="标准">GB</Descriptions.Item>
+                    <Descriptions.Item label="产品组">10001</Descriptions.Item>
+                    <Descriptions.Item label="图纸描述">抓取</Descriptions.Item>
+                    <Descriptions.Item label="材料">铝</Descriptions.Item>
+                    <Descriptions.Item label="重量">100克</Descriptions.Item>
+                    <Descriptions.Item label="发布时间">2021:05:21 11:02</Descriptions.Item>
+                    <Descriptions.Item label="发布者">胡学军</Descriptions.Item>
+                    <Descriptions.Item label="发布阶段">胡经理审批</Descriptions.Item>
+                    <Descriptions.Item label="最后修改人">胡学军</Descriptions.Item>
+                    <Descriptions.Item label="最后修改缘由">更新</Descriptions.Item>
+                    <Descriptions.Item label="最后修改时间">2021:05:19 12:02</Descriptions.Item>
+                </Descriptions>
+                <div style={{marginTop:'30px'}}>
+                    <Button icon="edit" onClick={this.editDraws}>Ckeck-out</Button>
                 </div>
-                <Form onSubmit={this.handleSubmit} style={{marginTop:'30px', width:'400px',marginLeft:"30px"}}>
-                    <Form.Item>
-                        {getFieldDecorator('draw_number', {
-                            rules: [{ required: true, message: '请输入相应的图纸编号' }],
-                        })(
-                            <div style={{display:'flex',justifyContent:'space-between'}}>
-                                <span style={{lineHeight:'30px'}}>图纸编号:</span>
-                                <Input style={{ width: '300px' }}/>
-                            </div>    
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('draw_name', {
-                            rules: [{ required: true, message: '输入相应的图纸名称' }],
-                        })(
-                            <div style={{display:'flex',justifyContent:'space-between'}}>
-                                <span style={{lineHeight:'30px'}}>图纸名称:</span>
-                                <Input style={{width:'300px',marginLeft:'30px'}}/>
-                            </div>
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('draw_type', {
-                            rules: [{ required: true, message: '请选择相应的图纸类型' }],
-                        })(
-                            <div style={{display:'flex',justifyContent:'space-between'}}>
-                                <span style={{lineHeight:'30px'}}>图纸分类:</span>
-                                <Select defaultValue="lucy" style={{ width:'300px' }} >
-                                    <Option value="jack">二维图</Option>
-                                    <Option value="lucy">工程图</Option>
-                                    <Option value="Yiminghe">轴测图</Option>
-                                </Select>
-                            </div>
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('part_name', {
-                            rules: [{ required: true, message: '请选择所属零件' }],
-                        })(
-                            <div style={{display:'flex',justifyContent:'space-between'}}>
-                                <span style={{lineHeight:'30px'}}>所属零件:</span>
-                                <Select defaultValue="lucy" style={{ width:'300px'}} >
-                                    <Option value="jack">机械臂</Option>
-                                    <Option value="lucy">机械手</Option>
-                                    <Option value="Yiminghe">机械爪</Option>
-                                </Select>
-                            </div>
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('product_group', {
-                            rules: [{ required: true, message: '请选择所在产品组' }],
-                        })(
-                            <div style={{display:'flex',justifyContent:'space-between'}}>
-                                <span style={{lineHeight:'30px'}}>产品组:</span>
-                                <Select defaultValue="lucy" style={{ width:'300px' }} >
-                                    <Option value="jack">机械臂</Option>
-                                    <Option value="lucy">机械手</Option>
-                                    <Option value="Yiminghe">机械爪</Option>
-                                </Select>
-                            </div>
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('draw_standard', {
-                            rules: [{ required: true, message: '请选择图纸标准' }],
-                        })(
-                            <div style={{display:'flex',justifyContent:'space-between'}}>
-                                <span style={{lineHeight:'30px'}}>标准:</span>
-                                <Select defaultValue="jack" style={{ width:'300px' }} >
-                                    <Option value="jack">GB</Option>
-                                    <Option value="lucy">机械手</Option>
-                                    <Option value="Yiminghe">机械爪</Option>
-                                </Select>
-                            </div>
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                            <div style={{display:'flex',justifyContent:'space-between'}}>
-                                <span style={{lineHeight:'30px'}}>图纸描述:</span>
-                                <Input style={{width:'300px',marginLeft:'30px'}}/>
-                            </div>
-                    </Form.Item>
-                </Form>
-                <div style={{display:'flex',flexDirection:'column',width:'180px',marginLeft:'60px'}}>
-                    <Button  icon="file-pdf" style={{marginBottom:'20px'}}>PDF上传</Button>
-                    <Button  icon="codepen" style={{marginBottom:'20px'}}>数模上传</Button>
-                    <Button  icon="file-text" >tiff上传</Button>
-                </div>
-                <div style={{margin:'30px 300px',width:'200px',}}>
-                    <Button type='primary'>确定</Button>
-                    <Button style={{marginLeft:'20px'}} onClick={this.comeBack}>取消</Button>
-                </div>
+                <EditModal
+                    visible={this.state.editModalVisible}
+                    handleCancel={this.closeEditModal}
+                />
             </div>
         )
     }
 }
 
-const WrappedNormalLoginForm = Form.create({ name: 'create_draws' })(DrawDetil);
-
-export default WrappedNormalLoginForm
-
+export default DrawDetil

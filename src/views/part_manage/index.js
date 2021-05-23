@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { PageHeader } from 'antd';
-import './style.less'
+import './style.less';
 import { Tree,Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -21,16 +20,20 @@ const myPart = [
       title: '其他零件',
       key: '0-0',
       children: [
-        { title: '321321321', key: '0-0-0', isLeaf: true },
-        { title: '322321321', key: '0-0-0', isLeaf: true },
-        { title: '323321321', key: '0-0-0', isLeaf: true },
-        { title: '324321321', key: '0-0-0', isLeaf: true }
+        { title: '321321321', key: '0-1-0', isLeaf: false, 
+          children:[{ title: '321321321.pdf', key: '0-1-1', isLeaf: true }]
+        },
+        { title: '322321321', key: '0-2-0', isLeaf: true },
+        { title: '323321321', key: '0-3-0', isLeaf: true },
+        { title: '324321321', key: '0-4-0', isLeaf: true }
       ],
     }
   ];
+
     const onExpand = () => {
       console.log('Trigger Expand');
     };
+
 class PartManage extends Component {
     constructor(props) {
         super (props);
@@ -38,14 +41,15 @@ class PartManage extends Component {
     }
     onClick=()=>{
         console.log("跳转")
+        this.props.history.push("/app/part_manage/add_part")
     }
     render() {
         return (
             <Fragment>
                 <span>
                  <div className="title">零件管理</div>
-                <Button  className="button" type="primary" icon={<PlusOutlined />} onClick={this.onClick}>
-                    新建零件
+                <Button  className="button" type="primary"  onClick={this.onClick}>
+                <PlusOutlined />新建零件
                 </Button>
                 </span>
                 <DirectoryTree

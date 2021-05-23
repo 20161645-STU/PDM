@@ -1,72 +1,122 @@
 import React, { Component, Fragment } from 'react';
-import { Tree, Button } from 'antd';
+import { Tree, Button, message, Icon } from 'antd';
+
+import { Model } from '../../dataModule/testBone'
+import { getAllDrawsUrl } from '../../../src/dataModule/UrlList'
+
+import { getUserName } from '../../../src/publicFunction'
+import './style.less'
+import { connect } from 'react-redux';
+import { sentDetilType } from '../../components/common/store/actionCreaters'
 
 const { TreeNode, DirectoryTree } = Tree;
+
+const model = new Model()
 
 
 class DrawingManage extends Component {
     constructor(props) {
         super (props);
         this.state = {
+            detail_type: '',
+            id: '',
+            drawsDatas:[],     //所有的图纸信息
             folderData: [{
-                title: '机械臂',
-                key: 1,
-                products: [
-                    {
-                        title: 'BOM表',
-                        key: '1-1'
-                    }, {
-                        title: '说明文档',
-                        key: '1-2'
-                    }, {
-                        title: '二维零件图',
-                        key: '1-3'
-                    }
-                ]
+                title: '我的图纸',
+                key: 1           
             }, {
-                title: '抓取机构',
-                key: 2,
-                products: [
-                    {
-                        title: 'BOM表',
-                        key: '2-1'
-                    }, {
-                        title: '说明文档',
-                        key: '2-2'
-                    }
-                ]
+                title: '其他图纸',
+                key: 2
             }]
         }
     }
 
-    onSelect = (keys, event) => {
-        console.log('Trigger Select', keys, event);
+    //生命周期函数
+    componentDidMount() {
+        this.getAllDraws()
+    }
+
+    //获取所有图纸数据
+    getAllDraws = () => {
+        let me = this
+        model.fetch(
+            {},
+            getAllDrawsUrl,
+            'get',
+            function (res) {
+                // console.log(res)
+                me.setState({
+                    drawsDatas: res.data
+                })
+            },
+            function (error) {
+                message.error('获取图纸信息失败！')
+            },
+            false
+        )
+    }
+
+    //查看图纸详情
+    getTypeName = (keys, event) => {
+        // console.log('Trigger Select', keys, event);
+        this.setState({
+            id: keys[0]
+        })
+        this.sentDrawMes()
+    }
+
+    //给后台发送文件类型和名字
+    sentDrawMes = () => {
+        const { detail_type, id } = this.state
+        let params = {
+            detail_type,
+            id
+        }
+        // console.log(params)
+        this.props.sendTypeMes(params)
     }
     
     onExpand = () => {
-        console.log('Trigger Expand');
+        this.setState({
+            detail_type: 'drawing'
+        })
     }
 
-    //创建图纸
+    //跳转创建图纸
     createDraws = () => {
-        this.props.history.push('/app/drawing_detail')
+        this.props.history.push('/app/drawing_manage/add_drawing')
     }
 
     render() {
+        const { folderData, drawsDatas } = this.state
         return (
             <Fragment>
-                <div style={{display: 'flex'}}>
-                    <h1>图纸管理</h1>
-                    <Button type="primary" icon="plus" style={{marginLeft:'300px'}} onClick={this.createDraws}>创建图纸</Button>
+                <div style={{display:'flex',marginBottom:'20px'}}>
+                    <span className="draw_title">图纸管理</span>
+                    <Button type="primary" icon="plus"  className="draw_create" onClick={this.createDraws}>创建图纸</Button>
                 </div>
-                <DirectoryTree multiple defaultExpandAll onSelect={this.onSelect} onExpand={this.onExpand}>
-                    {this.state.folderData.map((item,index) => {
+                <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} >
+                    {folderData.map((item,index) => {
                         return (
                             <TreeNode title={item.title} key={index}>
-                                {item.products.map((item) => {
-                                    return (
-                                        <TreeNode title={ item.title} key={ item.key} isLeaf />     
-                                    )
+                                {drawsDatas.map((item) => {
+                                    if (item.createdBy === getUserName()) {
+                                        return (
+                                            <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
+                                            // <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="codepen" />}/>
+                                            // <TreeNode title={secItem.name} key={secItem.id} >
+                                            //     {/* {thirdData.map((thirItem) => {
+                                            //         if (thirItem.type === secItem.title) {
+                                            //             return (
+                                            //                 <TreeNode title={thirItem.title} key={thirItem.key} isLeaf icon={ <Icon type="codepen" />}/>
+                                            //            )
+                                            //         }
+                                            //         return null
+                                            //     }) } */}
+                                            // </TreeNode>
+                                        )
+                                    }
+                                    return null
                                 })}
                             </TreeNode>
                         )
@@ -77,4 +127,9 @@ class DrawingManage extends Component {
     }
 }
 
-export default  DrawingManage;
+const mapDispatchToProps = (dispatch) => {
+    return { sendTypeMes:  data =>  dispatch(sentDetilType(data))   }
+}
+
+export default connect(null, mapDispatchToProps)(DrawingManage)
+

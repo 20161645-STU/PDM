@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import { Menu } from 'antd';
+import { Menu, Icon } from 'antd';
 import { Link } from "react-router-dom";
-import { ProjectOutlined, BlockOutlined, HomeOutlined,FormOutlined,HistoryOutlined,FileOutlined } from '@ant-design/icons';
+import { ProjectOutlined, BlockOutlined, HomeOutlined, FormOutlined, HistoryOutlined, FileOutlined } from '@ant-design/icons';
+
 //import { getUserName } from '../../publicFunction';
 //import history from './history';
 
@@ -26,7 +27,7 @@ export default class SideMenu extends Component {
       >
         <Menu.ItemGroup
           style={{height: '100px'}}
-          key="HistoryOutlined"
+          key="sub1"
           title={
             <span style={{color: '#fff', fontSize: '16px'}}>
               <HistoryOutlined />&nbsp;
@@ -36,7 +37,7 @@ export default class SideMenu extends Component {
         ></Menu.ItemGroup>
         <Menu.ItemGroup
           style={{height: '40px'}}
-          key="HomeOutlined"
+          key="sub2"
           title={
             <span style={{color: '#fff', fontSize: '16px'}}>
               <Link to='/app/my_home'>
@@ -48,7 +49,7 @@ export default class SideMenu extends Component {
         ></Menu.ItemGroup>
         <Menu.ItemGroup
           style={{height: '40px'}}
-          key="ProjectOutlined"
+          key="sub3"
           title={
             <span style={{color: '#fff', fontSize: '16px'}}>
               <Link to='/app/program_manage'>
@@ -61,7 +62,7 @@ export default class SideMenu extends Component {
         </Menu.ItemGroup>
         <Menu.ItemGroup
           style={{height: '40px'}}
-          key="BlockOutlined"
+          key="sub4"
           title={
             <span style={{color: '#fff', fontSize: '16px'}}>
                <Link to='/app/part_manage'>
@@ -74,7 +75,20 @@ export default class SideMenu extends Component {
         </Menu.ItemGroup>
         <Menu.ItemGroup
           style={{height: '40px'}}
-          key="FormOutlined"
+          key="sub5"
+          title={
+            <span style={{color:'#fff', fontSize: '16px'}}>
+               <Link to='/app/modal_manage'>
+               <Icon type="code-sandbox" />&nbsp;
+              模型管理
+              </Link>
+            </span>
+          }
+        >
+        </Menu.ItemGroup>
+        <Menu.ItemGroup
+          style={{height: '40px'}}
+          key="sub6"
           title={
             <span style={{color:'#fff', fontSize: '16px'}}>
                <Link to='/app/drawing_manage'>
@@ -87,18 +101,18 @@ export default class SideMenu extends Component {
         </Menu.ItemGroup>
         <Menu.ItemGroup
           style={{height: '40px'}}
-          key="FileOutlined"
+          key="sub7"
           title={
             <span style={{color:'#fff', fontSize: '16px'}}>
                <Link to='/app/file_manage'>
                <FileOutlined />&nbsp;
-              文件管理
+              文档管理
               </Link>
             </span>
           }
         >
         </Menu.ItemGroup>
-      </Menu>
+        </Menu>
     );
   }
 }

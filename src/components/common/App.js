@@ -16,8 +16,17 @@ import MyHome from '../../views/my_home';
 import ProgramManage from '../../views/program_manage';
 import PartManage from '../../views/part_manage';
 import DrawingManage from '../../views/drawing_manage';
-import DrawingDeteil from '../../views/drawing_manage/drawing_detail';
 import FileManage from '../../views/file_manage';
+import AddPart from '../../views/part_manage/add_part';
+import AddDrawing from '../../views/drawing_manage/add_drawing';
+import ProgramCreat from '../../views/program_manage/program_creat';
+import ProjectData from '../../views/program_manage/projectdata';
+import ProjectTeam from '../../views/program_manage/projectteam';
+import AddFile from '../../views/file_manage/add_file';
+import AddFolder from '../../views/my_home/add_folder';
+
+import ModalManage from '../../views/modal_manage/index'
+
 
 
 const { Content, Footer, Sider } = Layout;
@@ -71,16 +80,23 @@ class App extends Component {
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)',  marginTop: '4rem'}}>
                 <Switch>
                   <Route exact path={'/app'} render={props => <Index {...props} />} />
-                  <Route exact path={'/app/my_home'} component={MyHome}/>
-                  <Route exact path={'/app/program_manage'} component={ProgramManage}/>
-                  <Route exact path={'/app/part_manage'} component={PartManage}/>
-                  <Route exact path={'/app/drawing_manage'} component={DrawingManage} />
-                  <Route exact path={'/app/drawing_detail'} component={DrawingDeteil} />
-                  <Route exact path={'/app/file_manage'} component={FileManage}/>
+                  <Route exact path={'/app/my_home'} render={props => <MyHome {...props} />} />
+                  <Route exact path={'/app/program_manage'}  render={props => <ProgramManage {...props} />} />
+                  <Route exact path={'/app/part_manage'}  render={props => <PartManage {...props} />} />
+                  <Route exact path={'/app/drawing_manage'}  render={props => <DrawingManage {...props} />} />
+                  <Route exact path={'/app/file_manage'}  render={props => <FileManage {...props} />} />
+                  <Route exact path={'/app/part_manage/add_part'} render={props => <AddPart {...props} />} />
+                  <Route exact path={'/app/modal_manage'} render={props => <ModalManage {...props} />} />
+                  <Route exact path={'/app/drawing_manage/add_drawing'} render={props => <AddDrawing {...props} />} />
+                  <Route exact path={'/app/my_home/add_folder'} render={props => <AddFolder {...props} />} />
+                  <Route exact path={'/app/file_manage/add_file'} render={props => <AddFile {...props} />} />
+                  <Route exact path={'/app/program_manage/program_creat'}render={props => <ProgramCreat {...props} />} />
+                  <Route exact path={'/app/program_manage/projectdata'} render={props => <ProjectData {...props} />} />
+                  <Route exact path={'/app/program_manage/projectteam'} render={props => <ProjectTeam {...props} />} />
                   <Route component={noMatch} />
                 </Switch>
               </Content>
-              <Sider width={800}  style={{ background: '#E6E6FA',border: '10px solid #00000' }}>
+              <Sider  style={{padding: '0 24px', minHeight: 'calc(100vh - 111px)',  marginTop: '3rem', borderLeft:'1px solid 	#DCDCDC'}} width={800} theme={'light'}>
                 <InformationPage />
               </Sider>
             </Layout>
