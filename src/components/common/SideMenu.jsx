@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
 import { Link } from "react-router-dom";
 import { ProjectOutlined, BlockOutlined, HomeOutlined, FormOutlined, HistoryOutlined, FileOutlined } from '@ant-design/icons';
 
@@ -73,7 +73,7 @@ export default class SideMenu extends Component {
           }
         >
         </Menu.ItemGroup>
-        <Menu.ItemGroup
+        {/* <Menu.ItemGroup
           style={{height: '40px'}}
           key="sub5"
           title={
@@ -85,7 +85,7 @@ export default class SideMenu extends Component {
             </span>
           }
         >
-        </Menu.ItemGroup>
+        </Menu.ItemGroup> */}
         <Menu.ItemGroup
           style={{height: '40px'}}
           key="sub6"

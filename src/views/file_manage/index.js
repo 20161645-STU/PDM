@@ -2,6 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { Tree, Button } from 'antd';
 import './style.less'
 
+import { connect } from 'react-redux';
+import { sentDetilType } from '../../components/common/store/actionCreaters'
+
 const { TreeNode, DirectoryTree } = Tree;
 
 
@@ -9,63 +12,70 @@ class FileManage extends Component {
     constructor(props) {
         super (props);
         this.state = {
+            detail_type: '',
+            id:'',
             folderData: [{
-                title: '我的文件',
-                key: 1,
-                products: [
-                    {
-                        title: 'BOM表',
-                        key: '1-1'
-                    }, {
-                        title: '说明文档',
-                        key: '1-2'
-                    }, {
-                        title: '二维零件图',
-                        key: '1-3'
-                    }
-                ]
+                title: '我的文档',
+                key: 1           
             }, {
-                title: '其他文件',
-                key: 2,
-                products: [
-                    {
-                        title: 'BOM表',
-                        key: '2-1'
-                    }, {
-                        title: '说明文档',
-                        key: '2-2'
-                    }
-                ]
-            }]
+                title: '其他文档',
+                key: 2
+                }],
+            secfolderData: [{
+                title: '开发文档',
+                id: 11223          
+            }, {
+                title: '任务计划安排表',
+                id:23454
+            }],
         }
     }
 
-    onSelect = (keys, event) => {
-        console.log('Trigger Select', keys, event);
-    }
-    
-    onExpand = () => {
-        console.log('Trigger Expand');
+    //查看文档详情
+    getTypeName = (keys, event) => {
+        // console.log('Trigger Select', keys, event);
+        this.setState({
+            id: keys[0]
+        })
+        this.sentFileMes()
     }
 
-    createDraws = () => {
+    //给rendux发送文件类型和名字
+    sentFileMes = () => {
+        const { detail_type, id } = this.state
+        let params = {
+            detail_type,
+            id
+        }
+        // console.log(params)
+        this.props.sendTypeMes(params)
+    }
+
+    onExpand = () => {
+        this.setState({
+            detail_type: 'file'
+        })
+    }
+
+    createFiles = () => {
         this.props.history.push('/app/file_manage/add_file')
     }
 
     render() {
+        const { folderData, secfolderData} = this.state
         return (
             <Fragment>
-                <span >
-                <div className="title">文件管理</div>
-                    <Button type="primary" icon="plus"  className="button" onClick={this.createDraws}>创建文件</Button>
-                </span>
-                <DirectoryTree multiple defaultExpandAll onSelect={this.onSelect} onExpand={this.onExpand}>
-                    {this.state.folderData.map((item,index) => {
+                <div className="file_div">
+                    <span className="file_title">文档管理</span>
+                    <Button type="primary" icon="plus"  className="file_create" onClick={this.createFiles}>创建文档</Button>
+                </div>
+                <DirectoryTree multiple  onSelect={this.getTypeName} onExpand={this.onExpand}>
+                    {folderData.map((item,index) => {
                         return (
                             <TreeNode title={item.title} key={index}>
-                                {item.products.map((item) => {
+                                {secfolderData.map((item) => {
                                     return (
-                                        <TreeNode title={ item.title} key={ item.key} isLeaf />     
+                                        <TreeNode title={ item.title} key={ item.id} isLeaf />     
                                     )
                                 })}
                             </TreeNode>
@@ -77,4 +87,8 @@ class FileManage extends Component {
     }
 }
 
-export default FileManage;
+const mapDispatchToProps = (dispatch) => {
+    return { sendTypeMes:  data =>  dispatch(sentDetilType(data))   }
+}
+
+export default connect(null, mapDispatchToProps)(FileManage);

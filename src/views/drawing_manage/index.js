@@ -32,9 +32,9 @@ class DrawingManage extends Component {
     }
 
     //生命周期函数
-    componentDidMount() {
-        this.getAllDraws()
-    }
+    // componentDidMount() {
+    //     this.getAllDraws()
+    // }
 
     //获取所有图纸数据
     getAllDraws = () => {
@@ -65,7 +65,7 @@ class DrawingManage extends Component {
         this.sentDrawMes()
     }
 
-    //给后台发送文件类型和名字
+    //给rendux发送文件类型和名字
     sentDrawMes = () => {
         const { detail_type, id } = this.state
         let params = {
@@ -91,7 +91,7 @@ class DrawingManage extends Component {
         const { folderData, drawsDatas } = this.state
         return (
             <Fragment>
-                <div style={{display:'flex',marginBottom:'20px'}}>
+                <div className="draw_div">
                     <span className="draw_title">图纸管理</span>
                     <Button type="primary" icon="plus"  className="draw_create" onClick={this.createDraws}>创建图纸</Button>
                 </div>

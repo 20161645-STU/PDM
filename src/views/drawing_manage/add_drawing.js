@@ -249,7 +249,7 @@ class AddDrawing extends Component {
                     <Button  icon="file-pdf" style={{marginBottom:'20px'}}>PDF上传</Button>
                     <Button  icon="codepen" style={{marginBottom:'20px'}}>数模上传</Button>
                 </div>
-                <div style={{margin:'30px 300px',width:'200px',}}>
+                <div style={{margin:'30px 300px',width:'200px'}}>
                     <Button type='primary' onClick={this.createDraw}>确定</Button>
                     <Button style={{marginLeft:'20px'}} onClick={this.comeBack}>取消</Button>
                 </div>

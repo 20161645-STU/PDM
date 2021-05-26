@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form,Button } from 'antd';
+import { Form } from 'antd';
 
 
 class FileDetail extends Component {
@@ -8,7 +8,7 @@ class FileDetail extends Component {
         return(
         <div>
         
-        fold
+        文档详情
          </div>
 )
 }

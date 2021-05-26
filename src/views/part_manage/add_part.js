@@ -4,7 +4,7 @@ import { Icon, Form, Input,  Select, Button } from 'antd';
 const { Option } = Select;
 class AddPart extends Component {
     comeBack = () => {
-        this.props.history.push('/app/drawing_manage')
+        this.props.history.push('/app/part_manage')
     }
     render() {
         const { getFieldDecorator } = this.props.form;

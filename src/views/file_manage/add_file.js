@@ -95,7 +95,7 @@ class AddFile extends Component {
             <Form.Item>
                     <div style={{display:'flex',justifyContent:'space-between'}}>
                         <span style={{lineHeight:'30px'}}>文件描述:</span>
-                        <Input style={{width:'300px',marginLeft:'30px',height:'60PX'}}/>
+                        <Input style={{width:'300px',marginLeft:'30px',height:'60px'}}/>
                     </div>
             </Form.Item>
         </Form>

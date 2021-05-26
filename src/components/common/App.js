@@ -96,7 +96,7 @@ class App extends Component {
                   <Route component={noMatch} />
                 </Switch>
               </Content>
-              <Sider  style={{padding: '0 24px', minHeight: 'calc(100vh - 111px)',  marginTop: '3rem', borderLeft:'1px solid 	#DCDCDC'}} width={800} theme={'light'}>
+              <Sider  style={{padding: '0 24px', minHeight: 'calc(100vh - 111px)',  marginTop: '3rem', borderLeft:'1px solid 	#DCDCDC'}} width={'50%'} theme={'light'}>
                 <InformationPage />
               </Sider>
             </Layout>
