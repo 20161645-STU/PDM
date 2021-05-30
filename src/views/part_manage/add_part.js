@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import { Icon, Form, Input,  Select, Button } from 'antd';
+import { PageHeader, Form, Input,  Select, Button } from 'antd';
 
 const { Option } = Select;
 class AddPart extends Component {
-    comeBack = () => {
-        this.props.history.push('/app/part_manage')
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
     }
     render() {
-        const { getFieldDecorator } = this.props.form;
-
-
+        const { getFieldDecorator } = this.props.form
         return (
             <div>
-                <div onClick={this.comeBack}>
-                    <Icon type="arrow-left" />
-                    <span>返回</span>
-                </div>
+                <PageHeader
+                    onBack={() =>  this.props.history.push('/app/part_manage')}
+                    title="返回"
+                />
                 <Form onSubmit={this.handleSubmit} style={{marginTop:'30px', width:'400px',marginLeft:"30px"}}>
                     <Form.Item>
                         {getFieldDecorator('draw_number', {
@@ -103,7 +104,6 @@ class AddPart extends Component {
                 <div style={{display:'flex',flexDirection:'column',width:'180px',marginLeft:'60px'}}>
                     <Button  icon="file-pdf" style={{marginBottom:'20px'}}>PDF上传</Button>
                     <Button  icon="codepen" style={{marginBottom:'20px'}}>数模上传</Button>
-                    <Button  icon="file-text" >tiff上传</Button>
                 </div>
                 <div style={{margin:'30px 300px',width:'200px',}}>
                     <Button type='primary'>确定</Button>
@@ -114,6 +114,6 @@ class AddPart extends Component {
     }
 }
 
-const WrappedNormalLoginForm = Form.create({ name: 'create_draws' })(AddPart);
+const WrappedNormalLoginForm = Form.create({ name: 'create_parts' })(AddPart);
 
 export default WrappedNormalLoginForm

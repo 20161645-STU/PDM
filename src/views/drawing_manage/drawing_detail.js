@@ -7,7 +7,8 @@ class DrawDetil extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            editModalVisible: false
+            editModalVisible: false,
+            data:{}
         }
     }
 
@@ -25,7 +26,18 @@ class DrawDetil extends Component{
         })
     }
 
+    //数据转换
+    handleChange = (type) => {
+        if (type === false) {
+            return '否'
+        } else if (type === true) {
+            return '是'
+        }
+    }
+
     render() {
+        const { data } = this.props
+        // console.log(data)
         return (
             <div style={{margin:'20px'}}>
                 <Descriptions
@@ -34,26 +46,26 @@ class DrawDetil extends Component{
                     column={1}
                     size={'small'}
                 >
-                    <Descriptions.Item label="图纸编号">325001</Descriptions.Item>
-                    <Descriptions.Item label="图纸名称">机械手臂正视图</Descriptions.Item>
-                    <Descriptions.Item label="图纸版本">AA</Descriptions.Item>
-                    <Descriptions.Item label="创建时间">2021:05:19 11:02</Descriptions.Item>
-                    <Descriptions.Item label="创建人">admin</Descriptions.Item>
-                    <Descriptions.Item label="是否冻结">否</Descriptions.Item>
-                    <Descriptions.Item label="是否审查">否</Descriptions.Item>
-                    <Descriptions.Item label="流程状态">发放</Descriptions.Item>
+                    <Descriptions.Item label="图纸编号">{data.drawingNo}</Descriptions.Item>
+                    <Descriptions.Item label="图纸名称">{ data.name}</Descriptions.Item>
+                    <Descriptions.Item label="图纸版本">{data.version}</Descriptions.Item>
+                    <Descriptions.Item label="创建时间">{data.createDate}</Descriptions.Item>
+                    <Descriptions.Item label="创建人">{data.createdBy}</Descriptions.Item>
+                    <Descriptions.Item label="是否冻结">{ this.handleChange(data.frozen)}</Descriptions.Item>
+                    <Descriptions.Item label="是否审查">{ this.handleChange(data.reviewed)}</Descriptions.Item>
+                    <Descriptions.Item label="流程状态">{data.processState}</Descriptions.Item>
                     {/* <Descriptions.Item label="所属零件">机械手臂</Descriptions.Item> */}
-                    <Descriptions.Item label="标准">GB</Descriptions.Item>
-                    <Descriptions.Item label="产品组">10001</Descriptions.Item>
-                    <Descriptions.Item label="图纸描述">抓取</Descriptions.Item>
-                    <Descriptions.Item label="材料">铝</Descriptions.Item>
-                    <Descriptions.Item label="重量">100克</Descriptions.Item>
-                    <Descriptions.Item label="发布时间">2021:05:21 11:02</Descriptions.Item>
-                    <Descriptions.Item label="发布者">胡学军</Descriptions.Item>
-                    <Descriptions.Item label="发布阶段">胡经理审批</Descriptions.Item>
-                    <Descriptions.Item label="最后修改人">胡学军</Descriptions.Item>
-                    <Descriptions.Item label="最后修改缘由">更新</Descriptions.Item>
-                    <Descriptions.Item label="最后修改时间">2021:05:19 12:02</Descriptions.Item>
+                    <Descriptions.Item label="标准">{data.standard}</Descriptions.Item>
+                    <Descriptions.Item label="产品组">{data.productGroup}</Descriptions.Item>
+                    <Descriptions.Item label="图纸描述">{data.tag}</Descriptions.Item>
+                    <Descriptions.Item label="材料">{data.substance}</Descriptions.Item>
+                    <Descriptions.Item label="重量">{(data.weight + data.weightUnit).toString()}</Descriptions.Item>
+                    <Descriptions.Item label="发布时间">{ data.releaseDate}</Descriptions.Item>
+                    <Descriptions.Item label="发布者">{data.releasedBy}</Descriptions.Item>
+                    <Descriptions.Item label="发布阶段">{data.releasePhase}</Descriptions.Item>
+                    <Descriptions.Item label="最后修改人">{data.modifiedBy}</Descriptions.Item>
+                    <Descriptions.Item label="最后修改缘由">{data.modifiedReason}</Descriptions.Item>
+                    <Descriptions.Item label="最后修改时间">{ data.modifyDate}</Descriptions.Item>
                 </Descriptions>
                 <div style={{marginTop:'30px'}}>
                     <Button icon="edit" onClick={this.editDraws}>Ckeck-out</Button>

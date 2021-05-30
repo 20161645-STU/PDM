@@ -41,7 +41,7 @@ class  ProgramManage extends Component {
             getAllProjectUrl,
             'get',
             function (res) {
-                console.log(res)
+                // console.log(res)
                 me.setState({
                     projectsData: res.data
                 })
@@ -109,7 +109,6 @@ class  ProgramManage extends Component {
                                 {projectsData !== null ? projectsData.map((item) => {
                                     if (true) {
                                         return (
-                                            // <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
                                             <TreeNode title={item.name} key={item.id} >
                                                 <TreeNode title={'program data'} key={'program data'} isLeaf icon={<Icon type="file-pdf" />} />
                                                 <TreeNode title={'program team'} key={'program team'} isLeaf icon={ <Icon type="team" />}/>

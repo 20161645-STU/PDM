@@ -2,12 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { Tree, Button, message, Icon } from 'antd';
 
 import { Model } from '../../dataModule/testBone'
-import { getAllDrawsUrl } from '../../../src/dataModule/UrlList'
+import { getAllDrawsUrl, getAloneDrawUrl } from '../../../src/dataModule/UrlList'
 
 import { getUserName } from '../../../src/publicFunction'
 import './style.less'
 import { connect } from 'react-redux';
-import { sentDetilType } from '../../components/common/store/actionCreaters'
+import { sentDetilType, storeExpandedKeys,  storeSelectedkeys } from '../../components/common/store/actionCreaters'
 
 const { TreeNode, DirectoryTree } = Tree;
 
@@ -19,8 +19,7 @@ class DrawingManage extends Component {
         super (props);
         this.state = {
             detail_type: '',
-            id: '',
-            drawsDatas:[],     //所有的图纸信息
+            drawsDatas: [],     //所有的图纸信息
             folderData: [{
                 title: '我的图纸',
                 key: 1           
@@ -32,9 +31,9 @@ class DrawingManage extends Component {
     }
 
     //生命周期函数
-    // componentDidMount() {
-    //     this.getAllDraws()
-    // }
+    componentDidMount() {
+        this.getAllDraws()
+    }
 
     //获取所有图纸数据
     getAllDraws = () => {
@@ -58,29 +57,66 @@ class DrawingManage extends Component {
 
     //查看图纸详情
     getTypeName = (keys, event) => {
-        // console.log('Trigger Select', keys, event);
-        this.setState({
-            id: keys[0]
-        })
-        this.sentDrawMes()
+        // console.log('id', keys);
+        if (keys[0] === '0' || keys[0] === '1') {
+            console.log('id', keys);
+        } else {
+            this.getAloneDraws(keys[0])
+        }
+        let params = {
+            selectedKeys: keys[0]
+        }
+        this.storeSelectedkeys(params)
     }
 
-    //给rendux发送文件类型和名字
-    sentDrawMes = () => {
-        const { detail_type, id } = this.state
+    // 获得单个图纸的详细信息
+    getAloneDraws = (params) => {
+        let me = this
+        model.fetch(
+            {id: params},
+            getAloneDrawUrl,
+            'get',
+            function (res) {
+                // console.slog(111, res.data[0])
+                me.sentDrawMes( res.data[0])
+            },
+            function (error) {
+                message.error('获取图纸信息失败！')
+            },
+            false
+        )
+    }
+
+    //给rendux发送文件类型
+    sentDrawMes = (aloneDrawsDatas) => {
+        const { detail_type } = this.state
         let params = {
             detail_type,
-            id
+            aloneDrawsDatas  //单个图纸详情
         }
         // console.log(params)
         this.props.sendTypeMes(params)
     }
     
-    onExpand = () => {
+    onExpand = (keys) => {
         this.setState({
             detail_type: 'drawing'
         })
+        let params = {
+            expandedKeys: keys[0]
+        }
+        this.storeExpandedKeys(params)
     }
+
+     //在redux在保存树的状态
+     storeExpandedKeys = (params) => {
+        this.props.storeExpandedKeys(params)
+    }
+
+    storeSelectedkeys = (params) => {
+        this.props.storeSelectedkeys(params)
+    }
+
 
     //跳转创建图纸
     createDraws = () => {
@@ -89,16 +125,22 @@ class DrawingManage extends Component {
 
     render() {
         const { folderData, drawsDatas } = this.state
+        const { expandedKeys, selectedKeys } = this.props
+        console.log(expandedKeys, selectedKeys)
+        if (expandedKeys.expandedKeys === undefined) {
+            this.storeExpandedKeys({})
+            this.storeSelectedkeys({})
+        }
         return (
             <Fragment>
                 <div className="draw_div">
                     <span className="draw_title">图纸管理</span>
                     <Button type="primary" icon="plus"  className="draw_create" onClick={this.createDraws}>创建图纸</Button>
                 </div>
-                <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} >
+                <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} defaultExpandedKeys={[expandedKeys.expandedKeys]} defaultSelectedKeys={[selectedKeys.selectedKeys]}>
                     {folderData.map((item,index) => {
                         return (
-                            <TreeNode title={item.title} key={index}>
+                            <TreeNode title={item.title} key={index} >
                                 {drawsDatas.map((item) => {
                                     if (item.createdBy === getUserName()) {
                                         return (
@@ -127,9 +169,21 @@ class DrawingManage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return { sendTypeMes:  data =>  dispatch(sentDetilType(data))   }
+
+const mapStateToProps = (state) => {
+    return {
+        expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
+        selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
+    }
 }
 
-export default connect(null, mapDispatchToProps)(DrawingManage)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        sendTypeMes: data => dispatch(sentDetilType(data)),
+        storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
+        storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawingManage)
 

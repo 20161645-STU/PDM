@@ -28,6 +28,16 @@ export const sentDetilType = data => ({
   data: fromJS(data)
 })
 
+export const storeExpandedKeys = data => ({
+  type: constants.STOREEXPAND,
+  data: fromJS(data)
+})
+
+export const storeSelectedkeys = data => ({
+  type: constants.STORESELECT,
+  data: fromJS(data)
+})
+
 
 
 // 获得单个图纸的详细信息

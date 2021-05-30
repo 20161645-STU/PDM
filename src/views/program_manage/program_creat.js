@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { Input, DatePicker, Button, Icon, Form, message,Select } from 'antd';
+import { Input, DatePicker, Button, PageHeader, Form, message,Select } from 'antd';
 import { Model } from '../../../src/dataModule/testBone'
 import { createProjectUrl  } from '../../../src/dataModule/UrlList'
 
 const model = new Model();
 const { Option } = Select;
+const { TextArea } = Input;
 
 class ProgramCreat extends Component {
     constructor(props) {
@@ -80,23 +81,16 @@ class ProgramCreat extends Component {
         // this.comeBack()
     }
 
-    //返回
-    comeBack = () => {
-        this.props.history.push('/app/program_manage')
-    }
-
-
     render() {
         const { getFieldDecorator } = this.props.form
         const { project_no,name, description, sourcing, planning_period, admin,project_group } = this.state
         const projectNames = [{ project_name: '创课堂' }, { project_name: '众创空间' }]
         return (
             <Fragment>
-                 <div onClick={this.comeBack}>
-                    <Icon type="arrow-left" />
-                    <span>返回</span>
-                </div>
-                
+                <PageHeader
+                    onBack={() =>  this.props.history.push('/app/program_manage')}
+                    title="返回"
+                />
                  <Form onSubmit={this.handleSubmit} style={{marginTop:'30px', width:'460px',marginLeft:"10px"}}>
                   
                     <Form.Item>
@@ -125,7 +119,7 @@ class ProgramCreat extends Component {
                         })(
                             <div style={{display:'flex',justifyContent:'space-between'}}>
                                 <span style={{lineHeight:'30px'}}>项目说明:</span>
-                                <Input style={{ width: '340px', marginLeft: '30px' }} value={description} onChange={e => this.handChange('description', e.target.value)} allowClear/>
+                                <TextArea style={{ width: '340px', marginLeft: '30px' }} rows={3} value={description} onChange={e => this.handChange('description', e.target.value)}/>
                             </div>
                         )}
                     </Form.Item>

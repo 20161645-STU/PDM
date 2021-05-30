@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Icon, Form, Input, Select, Button, message } from 'antd';
+import { Form, Input, Select, Button, message, PageHeader } from 'antd';
 import { getUserName } from '../../../src/publicFunction'
 import { Model } from '../../../src/dataModule/testBone'
-import { createDrawUrl  } from '../../../src/dataModule/UrlList'
+import { createDrawUrl } from '../../../src/dataModule/UrlList'
+
 
 const { Option } = Select;
+const { TextArea } = Input;
 const model = new Model();
 
 class AddDrawing extends Component {
@@ -26,8 +28,6 @@ class AddDrawing extends Component {
             weight: '',  //重量
             weight_unit: '',   //单位
             created_by: getUserName()
-            // drawsTypes: [{ typeName: '二维图', id: '1' }, { typeName: '轴测图', id: '2' }, { typeName: '上视图', id: '3' }],
-            // partsNames: [{ part_name: '机械臂', pid: '1' }, { part_name: '底座', pid: '2' }, { part_name: '连接件', pid: '3' }],
         }
     }
 
@@ -68,7 +68,6 @@ class AddDrawing extends Component {
         initData['is_reviewed'] = '0'
         initData['version'] = 'AA'
         initData['language'] = '中文'
-        initData['version'] = 'AA'
         initData['created_by'] = getUserName()
         this.setState(initData)
         // this.comeBack()
@@ -83,23 +82,21 @@ class AddDrawing extends Component {
         this.setState(newDrawsData)
     }
 
-    //返回
+    //取消创建
     comeBack = () => {
+        this.initState()
         this.props.history.push('/app/drawing_manage')
     }
+
 
     render() {
         const { getFieldDecorator } = this.props.form
         const {
             drawing_no,
             name,
-            // draw_id,
-            // part_id,
             product_group,
             standard,
             tag,
-            // drawsTypes,
-            // partsNames,
             substance,
             weight,
             weight_unit
@@ -107,14 +104,15 @@ class AddDrawing extends Component {
 
         const drawStandards = [{ standard_name: 'GB' }, { standard_name: 'USA' }, { standard_name: 'EU' }]
         const groupNames = [{ group_name: '1008611' }, { group_name: '100000' }, { group_name: '334600' }]
-        const weight_unit_data = [{unit_name:'克', key:'1'}, {unit_name:'千克', key:'2'}]
+        const weight_unit_data = [{ unit_name: '克', key: '1' }, { unit_name: '千克', key: '2' }]
+        
 
         return (
             <div>
-                <div onClick={this.comeBack}>
-                    <Icon type="arrow-left" />
-                    <span>返回</span>
-                </div>
+                <PageHeader
+                    onBack={() => this.props.history.push('/app/drawing_manage')}
+                    title="返回"
+                />
                 <Form onSubmit={this.handleSubmit} style={{marginTop:'30px', width:'400px',marginLeft:"30px"}}>
                     <Form.Item>
                         {getFieldDecorator('drawing_no', {
@@ -214,7 +212,7 @@ class AddDrawing extends Component {
                         })(
                             <div style={{display:'flex',justifyContent:'space-between'}}>
                                 <span style={{lineHeight:'30px'}}>图纸描述:</span>
-                            <Input style={{ width: '300px', marginLeft: '30px' }} value={tag} onChange={e => this.handChange('tag', e.target.value)} allowClear/>
+                                <TextArea style={{ width: '300px', marginLeft: '30px' }} rows={3} value={tag} onChange={e => this.handChange('tag', e.target.value)}/>
                             </div>   
                         )}
                     </Form.Item>

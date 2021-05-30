@@ -24,11 +24,13 @@ class  MyHome extends Component {
     constructor(props) {
         super (props);
         this.state = {}
-    }
+  }
+  
     onClick=()=>{
         console.log("跳转")
         this.props.history.push("/app/my_home/add_folder")
     }
+    
     render() {
         return (
             <Fragment>

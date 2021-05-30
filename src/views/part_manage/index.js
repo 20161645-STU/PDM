@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import './style.less';
-import { Tree,Button,Icon,message} from 'antd';
+import { Tree, Button, Icon, message } from 'antd';
+
 import { Model } from '../../dataModule/testBone';
-import { getAllPartsUrl } from '../../../src/dataModule/UrlList';
+import { getAllPartsUrl, getAlonePartUrl } from '../../../src/dataModule/UrlList';
+
 import { getUserName } from '../../../src/publicFunction';
 import { connect } from 'react-redux';
-import { sentDetilType } from '../../components/common/store/actionCreaters'
-import { PlusOutlined, } from '@ant-design/icons';
+import { sentDetilType, storeExpandedKeys,  storeSelectedkeys } from '../../components/common/store/actionCreaters'
 
 const { DirectoryTree,TreeNode } = Tree;
 const model = new Model()
@@ -27,74 +28,115 @@ class PartManage extends Component {
               key: 2
           }]
         }
-      }
+    }
     
      //生命周期函数
-//      componentDidMount() {
-//       this.getAllParts()
-//   }
+    // componentDidMount() {
+    //   this.getAllParts()
+    // }
 
-  //获取所有零件数据
-  getAllParts = () => {
-      let me = this
-      model.fetch(
-          {},
-          getAllPartsUrl,
-          'get',
-          function (res) {
-              // console.log(res)
-              me.setState({
-                  partsDatas: res.data
-              })
-          },
-          function (error) {
-              message.error('获取零件信息失败！')
-          },
-          false
-      )
-  }
+    //获取所有零件数据
+    getAllParts = () => {
+        let me = this
+        model.fetch(
+            {},
+            getAllPartsUrl,
+            'get',
+            function (res) {
+                console.log(res)
+                me.setState({
+                    partsDatas: res.data
+                })
+            },
+            function (error) {
+                message.error('获取零件信息失败！')
+            },
+            false
+        )
+    }
 
-  //查看图纸详情
-  getTypeName = (keys, event) => {
-      // console.log('Trigger Select', keys, event);
-      this.setState({
-          id: keys[0]
-      })
-      this.sentPartMes()
-  }
+    // 获得单个零件的详细信息
+    getAlonePart = (params) => {
+        let me = this
+        model.fetch(
+            {id: params},
+            getAlonePartUrl,
+            'get',
+            function (res) {
+                // console.slog(111, res.data[0])
+                me.sentPartMes( res.data[0])
+            },
+            function (error) {
+                message.error('获取零件信息失败！')
+            },
+            false
+        )
+    }
 
-  //给后台发送文件类型和名字
-  sentPartMes = () => {
-      const { detail_type, id } = this.state
-      let params = {
-          detail_type,
-          id
-      }
-      // console.log(params)
-      this.props.sendTypeMes(params)
-  }
+    //查看零件详情
+    getTypeName = (keys, event) => {
+        // console.log('id', keys);
+        if (keys[0] === '0' || keys[0] === '1') {
+            console.log('id', keys);
+        } else {
+            this.getAlonePart(keys[0])
+        }
+        let params = {
+            selectedKeys: keys[0]
+        }
+        this.storeSelectedkeys(params)
+    }
+
+    //给rendux发送文件类型
+    sentPartMes = (alonePartDatas) => {
+        const { detail_type } = this.state
+        let params = {
+            detail_type,
+            alonePartDatas  //单个零件详情
+        }
+        // console.log(params)
+        this.props.sendTypeMes(params)
+    }
   
-  onExpand = () => {
-      this.setState({
-          detail_type: 'part'
-      })
-  }
+    onExpand = (keys) => {
+        this.setState({
+            detail_type: 'part'
+        })
+        let params = {
+            expandedKeys: keys[0]
+        }
+        this.storeExpandedKeys(params)
+    }
 
-  //跳转创建图纸
-  createParts = () => {
-      this.props.history.push('/app/part_manage/add_part')
-  }
+     //在redux在保存树的状态
+    storeExpandedKeys = (params) => {
+        this.props.storeExpandedKeys(params)
+    }
+
+    storeSelectedkeys = (params) => {
+        this.props.storeSelectedkeys(params)
+    }
+
+    //跳转创建图纸
+    createParts = () => {
+        this.props.history.push('/app/part_manage/add_part')
+    }
+
     render() {
-      const { folderData, partsDatas } = this.state
+        const { folderData, partsDatas } = this.state
+        const { expandedKeys, selectedKeys } = this.props
+        console.log(expandedKeys, selectedKeys)
+        if (expandedKeys.expandedKeys === undefined) {
+            this.storeExpandedKeys({})
+            this.storeSelectedkeys({})
+        }
         return (
             <Fragment>
-                <span>
-                 <div className="title">零件管理</div>
-                <Button  className="button" type="primary"  onClick={this.createParts}>
-                <PlusOutlined />新建零件
-                </Button>
-                </span>
-                <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} >
+                <div className="part_div">
+                    <span className="part_title">零件管理</span>
+                    <Button type="primary" icon="plus"  className="part_create" onClick={this.createParts}>创建零件</Button>
+                </div>
+                <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} defaultExpandedKeys={[expandedKeys.expandedKeys]} defaultSelectedKeys={[selectedKeys.selectedKeys]} >
                     {folderData.map((item,index) => {
                         return (
                             <TreeNode title={item.title} key={index}>
@@ -120,17 +162,26 @@ class PartManage extends Component {
                             </TreeNode>
                         )
                     })}
-                </DirectoryTree>
-               
-              
+                </DirectoryTree>    
             </Fragment>
         )
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
+        selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
-    return { sendTypeMes:  data =>  dispatch(sentDetilType(data))   }
+    return {
+        sendTypeMes: data => dispatch(sentDetilType(data)),
+        storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
+        storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
+    }
 }
 
 
-export default connect(null, mapDispatchToProps)(PartManage);
+export default connect(mapStateToProps, mapDispatchToProps)(PartManage);
