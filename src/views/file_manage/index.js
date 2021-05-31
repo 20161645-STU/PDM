@@ -45,42 +45,48 @@ class FileManage extends Component {
         }
     }
 
+     //生命周期函数
+    componentDidMount() {
+      this.getAllDocuments()
+    }
+
+
     //获取所有文档数据
     getAllDocuments = () => {
-        let me = this
-        model.fetch(
-            {},
-            getAllDocumentsUrl,
-            'get',
-            function (res) {
-                // console.log(res)
-                me.setState({
-                    documentsDatas: res.data
-                })
-            },
-            function (error) {
-                message.error('获取文档信息失败！')
-            },
-            false
-        )
+      let me = this
+      model.fetch(
+          {},
+          getAllDocumentsUrl,
+          'get',
+          function (res) {
+              // console.log(333, res)
+              me.setState({
+                  documentsDatas: res.data
+              })
+          },
+          function (error) {
+              message.error('获取文档信息失败！')
+          },
+          false
+      )
     }
 
     // 获得单个文档的详细信息
     getAloneDocument = (params) => {
-        let me = this
-        model.fetch(
-            {id: params},
-            getAloneDocumentUrl,
-            'get',
-            function (res) {
-                // console.slog(111, res.data[0])
-                me.sentDocumentMes( res.data[0])
-            },
-            function (error) {
-                message.error('获取文档信息失败！')
-            },
-            false
-        )
+      let me = this
+      model.fetch(
+          {id: params},
+          getAloneDocumentUrl,
+          'get',
+          function (res) {
+              // console.log(111, res.data[0])
+              me.sentDocumentMes( res.data[0])
+          },
+          function (error) {
+              message.error('获取文档信息失败！')
+          },
+          false
+      )
     }
 
 
@@ -90,8 +96,10 @@ class FileManage extends Component {
         if (keys[0] === '0' || keys[0] === '1') {
             console.log('id', keys);
         } else {
-            // this.getAloneDocument(keys[0])
-            this.sentDocumentMes(null)
+          this.setState({
+            detail_type: 'file',
+          })
+          this.getAloneDocument(keys[0])
         }
         let params = {
             selectedKeys: keys[0]
@@ -112,9 +120,6 @@ class FileManage extends Component {
 
     onExpand = (keys) => {
         // console.log(1, keys)
-        this.setState({
-            detail_type: 'file',
-        })
         let params = {
             expandedKeys: keys[0]
         }
@@ -137,58 +142,58 @@ class FileManage extends Component {
 
 
     render() {
-        const { folderData, secfolderData } = this.state
-        const { expandedKeys, selectedKeys } = this.props
-        // console.log(expandedKeys, selectedKeys)
-        if (expandedKeys.expandedKeys === undefined) {
-            this.storeExpandedKeys({})
-            this.storeSelectedkeys({})
-        }
-        return (
-            <Fragment>
-                <div className="file_div">
-                    <span className="file_title">文档管理</span>
-                    <Button type="primary" icon="plus"  className="file_create" onClick={this.createFiles}>创建文档</Button>
-                </div>
-                <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} defaultExpandedKeys={[expandedKeys.expandedKeys]} defaultSelectedKeys={[selectedKeys.selectedKeys]}>
-                    {folderData.map((item,index) => {
-                        return (
-                            <TreeNode title={item.title} key={index}>
-                                {secfolderData.map((item) => {
-                                    if (item.document_type === 'WORLD') {
-                                        return <TreeNode title={item.title} key={item.id} isLeaf icon={<Icon type="file-word" /> }/>
-                                    } else if (item.document_type === 'PDF') {
-                                        return <TreeNode title={item.title} key={item.id} isLeaf icon={<Icon type="file-pdf" /> }/>
-                                    } else if (item.document_type === 'EXCEL') {
-                                        return <TreeNode title={item.title} key={item.id} isLeaf icon={<Icon type="file-excel" /> }/>
-                                    } else if (item.document_type === 'PPT') {
-                                        return <TreeNode title={item.title} key={item.id} isLeaf icon={<Icon type="file-ppt" /> }/>
-                                    }
-                                    return null
-                                })}
-                            </TreeNode>
-                        )
-                    })}
-                </DirectoryTree>
-            </Fragment>
-        )
+      const { folderData, documentsDatas } = this.state
+      const { expandedKeys, selectedKeys } = this.props
+      // console.log(expandedKeys, selectedKeys)
+      if (expandedKeys.expandedKeys === undefined) {
+          this.storeExpandedKeys({})
+          this.storeSelectedkeys({})
+      }
+      return (
+        <Fragment>
+            <div className="file_div">
+                <span className="file_title">文档管理</span>
+                <Button type="primary" icon="plus"  className="file_create" onClick={this.createFiles}>创建文档</Button>
+            </div>
+            <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} defaultExpandedKeys={[expandedKeys.expandedKeys]} defaultSelectedKeys={[selectedKeys.selectedKeys]}>
+                {folderData.map((item,index) => {
+                    return (
+                        <TreeNode title={item.title} key={index}>
+                          {documentsDatas.map((item) => {
+                            if (item.documentType === 'WORLD') {
+                                return <TreeNode title={item.name} key={item.id} isLeaf icon={<Icon type="file-word" /> }/>
+                            } else if (item.documentType === 'PDF') {
+                                return <TreeNode title={item.name} key={item.id} isLeaf icon={<Icon type="file-pdf" /> }/>
+                            } else if (item.documentType === 'EXCEL') {
+                                return <TreeNode title={item.name} key={item.id} isLeaf icon={<Icon type="file-excel" /> }/>
+                            } else if (item.documentType === 'PPT') {
+                                return <TreeNode title={item.name} key={item.id} isLeaf icon={<Icon type="file-ppt" /> }/>
+                            }
+                            return null
+                          })}
+                        </TreeNode>
+                    )
+                })}
+            </DirectoryTree>
+        </Fragment>
+      )
     }
 }
 
 const mapStateToProps = (state) => {
-    return {
-        expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
-        selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
-    }
+  return {
+    expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
+    selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
+  }
 }
 
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        sendTypeMes: data => dispatch(sentDetilType(data)),
-        storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
-        storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
-    }
+  return {
+    sendTypeMes: data => dispatch(sentDetilType(data)),
+    storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
+    storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileManage);

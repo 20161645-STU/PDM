@@ -29,9 +29,9 @@ class  ProgramManage extends Component {
     }
 
     //生命周期函数
-    // componentDidMount() {
-    //     this.getAllProjects()
-    // }
+    componentDidMount() {
+        this.getAllProjects()
+    }
 
     //获取所有项目数据
     getAllProjects = () => {

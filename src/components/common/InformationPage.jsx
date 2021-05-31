@@ -27,9 +27,9 @@ class InformationPage extends Component {
     } else if (detil_mes.detail_type === 'program') {
       content.push(<ProgramDetail key={'program'}/>)
     } else if (detil_mes.detail_type === 'part') {
-      content.push(<PartDetail key={'part'}/>)
+      content.push(<PartDetail key={'part'} data={ detil_mes.alonePartDatas}/>)
     } else if (detil_mes.detail_type === 'file') {
-      content.push(<FileDetail key={'file'}/>)
+      content.push(<FileDetail key={'file'}  data={ detil_mes.aloneDocumentDatas}/>)
     } 
 
     return (

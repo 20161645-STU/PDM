@@ -36,8 +36,8 @@ class DocumentDetil extends Component{
     }
 
     render() {
-        const {data} = this.state
-        // const { data } = this.props
+        // const {data} = this.state
+        const { data } = this.props
         // console.log(data)
         return (
             <div style={{margin:'20px'}}>
@@ -47,7 +47,7 @@ class DocumentDetil extends Component{
                     column={1}
                     size={'small'}
                 >
-                    <Descriptions.Item label="文档编号">{data.drawingNo}</Descriptions.Item>
+                    <Descriptions.Item label="文档编号">555</Descriptions.Item>
                     <Descriptions.Item label="文档名称">{ data.name}</Descriptions.Item>
                     <Descriptions.Item label="文档版本">{data.version}</Descriptions.Item>
                     <Descriptions.Item label="创建时间">{data.createDate}</Descriptions.Item>

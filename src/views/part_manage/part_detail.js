@@ -36,8 +36,8 @@ class PartDetil extends Component{
     }
 
     render() {
-        const { data } = this.state
-        // const { data } = this.props
+        // const { data } = this.state
+        const { data } = this.props
         // console.log(data)
         return (
             <div style={{margin:'20px'}}>
@@ -47,9 +47,9 @@ class PartDetil extends Component{
                     column={1}
                     size={'small'}
                 >
-                    <Descriptions.Item label="零件编号">{data.drawingNo}</Descriptions.Item>
+                    <Descriptions.Item label="零件编号">111</Descriptions.Item>
                     <Descriptions.Item label="零件名称">{ data.name}</Descriptions.Item>
-                    <Descriptions.Item label="图纸版本">{data.version}</Descriptions.Item>
+                    <Descriptions.Item label="零件版本">{data.version}</Descriptions.Item>
                     <Descriptions.Item label="创建时间">{data.createDate}</Descriptions.Item>
                     <Descriptions.Item label="创建人">{data.createdBy}</Descriptions.Item>
                     <Descriptions.Item label="是否冻结">{ this.handleChange(data.frozen)}</Descriptions.Item>
