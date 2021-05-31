@@ -18,6 +18,7 @@ export const getAloneDrawUrl = 'zss/findOne/'              //查看单个图纸�
 
 export const createProjectUrl = 'project/save/'     //创建项目
 export const getAllProjectUrl = 'project/findAll/'      //查看所有项目
+export const getAloneProjectUrl = 'project/findOne'
 
 export const createPartUrl = 'tss/save/'       //创建零件
 export const getAllPartsUrl = 'tss/findAll/'       //查看所有零件

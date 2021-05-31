@@ -46,9 +46,9 @@ class FileManage extends Component {
     }
 
      //生命周期函数
-    componentDidMount() {
-      this.getAllDocuments()
-    }
+    // componentDidMount() {
+    //   this.getAllDocuments()
+    // }
 
 
     //获取所有文档数据
@@ -155,11 +155,13 @@ class FileManage extends Component {
                 <span className="file_title">文档管理</span>
                 <Button type="primary" icon="plus"  className="file_create" onClick={this.createFiles}>创建文档</Button>
             </div>
-            <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} defaultExpandedKeys={[expandedKeys.expandedKeys]} defaultSelectedKeys={[selectedKeys.selectedKeys]}>
+              <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand}
+                  defaultExpandedKeys={[expandedKeys.expandedKeys]}
+                  defaultSelectedKeys={[selectedKeys.selectedKeys]}>
                 {folderData.map((item,index) => {
                     return (
                         <TreeNode title={item.title} key={index}>
-                          {documentsDatas.map((item) => {
+                          {documentsDatas.length !== 0 ?  documentsDatas.map((item) => {
                             if (item.documentType === 'WORLD') {
                                 return <TreeNode title={item.name} key={item.id} isLeaf icon={<Icon type="file-word" /> }/>
                             } else if (item.documentType === 'PDF') {
@@ -170,7 +172,7 @@ class FileManage extends Component {
                                 return <TreeNode title={item.name} key={item.id} isLeaf icon={<Icon type="file-ppt" /> }/>
                             }
                             return null
-                          })}
+                          }) : null}
                         </TreeNode>
                     )
                 })}

@@ -25,7 +25,7 @@ class InformationPage extends Component {
     } else if (detil_mes.detail_type === 'folder') {
       content.push(<FolderDetail key={'folder'}/>)
     } else if (detil_mes.detail_type === 'program') {
-      content.push(<ProgramDetail key={'program'}/>)
+      content.push(<ProgramDetail key={'program'} data={ detil_mes.aloneProjectDatas}/>)
     } else if (detil_mes.detail_type === 'part') {
       content.push(<PartDetail key={'part'} data={ detil_mes.alonePartDatas}/>)
     } else if (detil_mes.detail_type === 'file') {

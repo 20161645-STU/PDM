@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Icon } from 'antd';
+import { Table, PageHeader } from 'antd';
 
 const columns = [
     {
@@ -71,10 +71,10 @@ class ProjectTeam extends Component {
   render () {
       return (
         <Fragment>
-          <div onClick={this.comeBack} style={{marginBottom:'20px'}}>
-              <Icon type="arrow-left" />
-              <span>返回</span>
-          </div>
+           <PageHeader
+                  onBack={() => this.props.history.push('/app/program_manage')}
+                  title="返回"
+                />
               <Table columns={columns} dataSource={data} />
           </Fragment>
       )

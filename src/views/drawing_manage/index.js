@@ -31,9 +31,9 @@ class DrawingManage extends Component {
     }
 
     //生命周期函数
-    componentDidMount() {
-      this.getAllDraws()
-    }
+    // componentDidMount() {
+    //   this.getAllDraws()
+    // }
 
     //获取所有图纸数据
     getAllDraws = () => {
@@ -80,7 +80,7 @@ class DrawingManage extends Component {
           getAloneDrawUrl,
           'get',
           function (res) {
-              // console.slog(111, res.data[0])
+              // console.log(111, res.data[0])
               me.sentDrawMes( res.data[0])
           },
           function (error) {
@@ -108,7 +108,7 @@ class DrawingManage extends Component {
       this.storeExpandedKeys(params)
     }
 
-     //在redux在保存树的状态
+    //在redux在保存树的状态
     storeExpandedKeys = (params) => {
       this.props.storeExpandedKeys(params)
     }
@@ -137,11 +137,13 @@ class DrawingManage extends Component {
                 <span className="draw_title">图纸管理</span>
                 <Button type="primary" icon="plus"  className="draw_create" onClick={this.createDraws}>创建图纸</Button>
               </div>
-              <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} defaultExpandedKeys={[expandedKeys.expandedKeys]} defaultSelectedKeys={[selectedKeys.selectedKeys]}>
+          <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand}
+            defaultExpandedKeys={[expandedKeys.expandedKeys]}
+            defaultSelectedKeys={[selectedKeys.selectedKeys]}>
                   {folderData.map((item,index) => {
                       return (
                           <TreeNode title={item.title} key={index} >
-                              {drawsDatas.map((item) => {
+                              {drawsDatas.length !== 0 ? drawsDatas.map((item) => {
                                   if (item.createdBy === getUserName()) {
                                       return (
                                           <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
@@ -159,7 +161,7 @@ class DrawingManage extends Component {
                                       )
                                   }
                                   return null
-                              })}
+                              }) : null}
                           </TreeNode>
                       )
                   })}

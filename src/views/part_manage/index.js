@@ -31,9 +31,9 @@ class PartManage extends Component {
     }
     
      //生命周期函数
-    componentDidMount() {
-      this.getAllParts()
-    }
+    // componentDidMount() {
+    //   this.getAllParts()
+    // }
 
     //获取所有零件数据
     getAllParts = () => {
@@ -136,30 +136,32 @@ class PartManage extends Component {
                 <span className="part_title">零件管理</span>
                 <Button type="primary" icon="plus"  className="part_create" onClick={this.createParts}>创建零件</Button>
               </div>
-              <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand} defaultExpandedKeys={[expandedKeys.expandedKeys]} defaultSelectedKeys={[selectedKeys.selectedKeys]} >
+          <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand}
+            defaultExpandedKeys={[expandedKeys.expandedKeys]}
+            defaultSelectedKeys={[selectedKeys.selectedKeys]} >
                   {folderData.map((item,index) => {
                       return (
-                          <TreeNode title={item.title} key={index}>
-                              {partsDatas.map((item) => {
-                                  if (true) {
-                                      return (
-                                          <TreeNode title={item.name} key={item.id} icon={ <Icon type="folder" />}  isLeaf/>
-                                          // <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="codepen" />}/>
-                                          // <TreeNode title={secItem.name} key={secItem.id} >
-                                          //     {/* {thirdData.map((thirItem) => {
-                                          //         if (thirItem.type === secItem.title) {
-                                          //             return (
-                                          //                 <TreeNode title={thirItem.title} key={thirItem.key} isLeaf icon={ <Icon type="codepen" />}/>
-                                          //            )
-                                          //         }
-                                          //         return null
-                                          //     }) } */}
-                                          // </TreeNode>
-                                      )
-                                  }
-                                  return null
-                              })}
-                          </TreeNode>
+                        <TreeNode title={item.title} key={index}>
+                            {partsDatas.length !== 0 ? partsDatas.map((item) => {
+                                if (true) {
+                                    return (
+                                        <TreeNode title={item.name} key={item.id} icon={ <Icon type="folder" />}  isLeaf/>
+                                        // <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="codepen" />}/>
+                                        // <TreeNode title={secItem.name} key={secItem.id} >
+                                        //     {/* {thirdData.map((thirItem) => {
+                                        //         if (thirItem.type === secItem.title) {
+                                        //             return (
+                                        //                 <TreeNode title={thirItem.title} key={thirItem.key} isLeaf icon={ <Icon type="codepen" />}/>
+                                        //            )
+                                        //         }
+                                        //         return null
+                                        //     }) } */}
+                                        // </TreeNode>
+                                    )
+                                }
+                                return null
+                            }) : null}
+                        </TreeNode>
                       )
                   })}
               </DirectoryTree>    
