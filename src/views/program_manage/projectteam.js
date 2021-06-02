@@ -71,12 +71,12 @@ class ProjectTeam extends Component {
   render () {
       return (
         <Fragment>
-           <PageHeader
-                  onBack={() => this.props.history.push('/app/program_manage')}
-                  title="返回"
-                />
-              <Table columns={columns} dataSource={data} />
-          </Fragment>
+          <PageHeader
+            onBack={() => this.props.history.push('/app/program_manage')}
+            title="返回"
+          />
+          <Table columns={columns} dataSource={data} />
+      </Fragment>
       )
   }
 }

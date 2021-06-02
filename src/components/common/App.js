@@ -16,6 +16,7 @@ import MyHome from '../../views/my_home';
 import ProgramManage from '../../views/program_manage';
 import PartManage from '../../views/part_manage';
 import DrawingManage from '../../views/drawing_manage';
+import AddDrawingProcess from '../../views/drawing_manage/addDrawProcess'
 import FileManage from '../../views/file_manage';
 import AddPart from '../../views/part_manage/add_part';
 import AddDrawing from '../../views/drawing_manage/add_drawing';
@@ -83,7 +84,8 @@ class App extends Component {
                   <Route exact path={'/app/my_home'} render={props => <MyHome {...props} />} />
                   <Route exact path={'/app/program_manage'}  render={props => <ProgramManage {...props} />} />
                   <Route exact path={'/app/part_manage'}  render={props => <PartManage {...props} />} />
-                  <Route exact path={'/app/drawing_manage'}  render={props => <DrawingManage {...props} />} />
+                  <Route exact path={'/app/drawing_manage'} render={props => <DrawingManage {...props} />} />
+                  <Route exact path={'/app/drawing_manage/add_drawing_process'} render={props => <AddDrawingProcess {...props} />} />
                   <Route exact path={'/app/file_manage'}  render={props => <FileManage {...props} />} />
                   <Route exact path={'/app/part_manage/add_part'} render={props => <AddPart {...props} />} />
                   <Route exact path={'/app/modal_manage'} render={props => <ModalManage {...props} />} />

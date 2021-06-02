@@ -46,9 +46,9 @@ class FileManage extends Component {
     }
 
      //生命周期函数
-    // componentDidMount() {
-    //   this.getAllDocuments()
-    // }
+    componentDidMount() {
+      this.getAllDocuments()
+    }
 
 
     //获取所有文档数据

@@ -8,7 +8,7 @@
  */
 // export const originalUrl = 'http://10.21.1.50:8000/';
 // export const originalUrl = 'http://10.41.119.14:8088/'   //lab325
-export const originalUrl = 'http://192.168.1.116:8088/'     //lab325
+export const originalUrl = 'http://192.168.1.105:8088/'     //lab325
 // export const originalUrl = 'http://10.41.119.14:9000/'
 
 // export const origationUrl = 'app/createorg/';
