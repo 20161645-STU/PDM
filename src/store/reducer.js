@@ -8,10 +8,12 @@
  */
 import { combineReducers } from 'redux-immutable';
 import { reducer as commonReducer } from '../components/common/store'
+import { reducer as viewsReducer } from '../views/store'
 
 
 const reducer = combineReducers({
-    commonReducer
+    commonReducer,
+    viewsReducer
 });
 
 export default reducer;

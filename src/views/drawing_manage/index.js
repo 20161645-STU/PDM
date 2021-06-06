@@ -31,9 +31,9 @@ class DrawingManage extends Component {
   }
 
   //生命周期函数
-  componentDidMount() {
-    this.getAllDraws()
-  }
+  // componentDidMount() {
+  //   this.getAllDraws()
+  // }
 
   //获取所有图纸数据
   getAllDraws = () => {
@@ -148,27 +148,27 @@ class DrawingManage extends Component {
         >
           {folderData.map((item,index) => {
               return (
-                  <TreeNode title={item.title} key={index} >
-                      {drawsDatas.length !== 0 ? drawsDatas.map((item) => {
-                          if (item.createdBy === getUserName()) {
-                              return (
-                                  <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
-                                  // <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="codepen" />}/>
-                                  // <TreeNode title={secItem.name} key={secItem.id} >
-                                  //     {/* {thirdData.map((thirItem) => {
-                                  //         if (thirItem.type === secItem.title) {
-                                  //             return (
-                                  //                 <TreeNode title={thirItem.title} key={thirItem.key} isLeaf icon={ <Icon type="codepen" />}/>
-                                  //            )
-                                  //         }
-                                  //         return null
-                                  //     }) } */}
-                                  // </TreeNode>
-                              )
-                          }
-                          return null
-                      }) : null}
-                  </TreeNode>
+                <TreeNode title={item.title} key={index} >
+                    {drawsDatas.length !== 0 ? drawsDatas.map((item) => {
+                        if (item.createdBy === getUserName()) {
+                            return (
+                                <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
+                                // <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="codepen" />}/>
+                                // <TreeNode title={secItem.name} key={secItem.id} >
+                                //     {/* {thirdData.map((thirItem) => {
+                                //         if (thirItem.type === secItem.title) {
+                                //             return (
+                                //                 <TreeNode title={thirItem.title} key={thirItem.key} isLeaf icon={ <Icon type="codepen" />}/>
+                                //            )
+                                //         }
+                                //         return null
+                                //     }) } */}
+                                // </TreeNode>
+                            )
+                        }
+                        return null
+                    }) : null}
+                </TreeNode>
               )
           })}
         </DirectoryTree>

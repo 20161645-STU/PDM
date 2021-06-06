@@ -31,9 +31,9 @@ class PartManage extends Component {
     }
     
      //生命周期函数
-    componentDidMount() {
-      this.getAllParts()
-    }
+    // componentDidMount() {
+    //   this.getAllParts()
+    // }
 
     //获取所有零件数据
     getAllParts = () => {

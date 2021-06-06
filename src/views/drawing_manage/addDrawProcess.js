@@ -1,22 +1,15 @@
 import React, { Component } from 'react'
-import { Steps, PageHeader, Button, message  } from 'antd'
+import { Steps, PageHeader  } from 'antd'
 import './style.less'
 
 import AddDrawings from './add_drawing'
 import DrawsUpload from './drawingUpload'
 
-const { Step } = Steps
+import { connect } from 'react-redux'
+import { creatNewDrawing } from '../store/actionCreaters'
 
-const steps = [
-  {
-    title: '图纸信息填写',
-    content: <AddDrawings />
-  },
-  {
-    title: '图纸文件上传',
-    content: <DrawsUpload/>,
-  }
-];
+
+const { Step } = Steps
 
 class AddDrawingProcess extends Component {
   constructor(props) {
@@ -26,12 +19,13 @@ class AddDrawingProcess extends Component {
     };
   }
 
-  next() {
+  next = (params) => {
     const current = this.state.current + 1;
     this.setState({ current });
+    this.props.creatNewDrawing(params)
   }
 
-  prev() {
+  prev = () => {
     const current = this.state.current - 1;
     this.setState({ current });
   }
@@ -43,6 +37,22 @@ class AddDrawingProcess extends Component {
 
   render() {
     const { current } = this.state
+    const steps = [
+      {
+        title: '图纸信息填写',
+        content: <AddDrawings
+                  next={this.next}
+                  history={this.props.history}
+                />
+      },
+      {
+        title: '图纸文件上传',
+        content: <DrawsUpload
+                    prev={this.prev}
+                    history={this.props.history}
+                  />
+      }
+    ]
     return (
       <div>
          <PageHeader
@@ -56,26 +66,6 @@ class AddDrawingProcess extends Component {
             ))}
           </Steps>
           <div className="steps-content">{steps[current].content}</div>
-          <div className="steps-buttons">
-            <div className="steps-action">
-              {current < steps.length - 1 && (
-                <Button type="primary" onClick={() => this.next()}>
-                  下一步
-                </Button>
-              )}
-              {current === steps.length - 1 && (
-                <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                  确定
-                </Button>
-              )}
-              {current > 0 && (
-                <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                  上一步
-                </Button>
-              )}
-            </div>
-            <Button onClick={this.comeBack}>取消</Button>
-            </div>
         </div>
        
       </div>
@@ -83,4 +73,10 @@ class AddDrawingProcess extends Component {
   }
 }
 
-export default AddDrawingProcess
+const mapDispatchToProps = (dispatch) => {
+  return {
+    creatNewDrawing: data => dispatch(creatNewDrawing(data)),
+  }
+}
+
+export default  connect(null, mapDispatchToProps)(AddDrawingProcess)

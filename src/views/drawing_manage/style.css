@@ -23,8 +23,6 @@
 }
 .steps-buttons {
   display: flex;
-  margin: 60px auto 60px 300px;
-}
-.steps-action {
-  width: 200px;
+  width: 300px;
+  margin: 60px 60px 60px 260px;
 }
