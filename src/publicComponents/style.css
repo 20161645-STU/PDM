@@ -84,3 +84,69 @@
 .public-pagination {
   margin-top: 20px;
 }
+.uploadImage {
+  width: 8rem;
+  height: 8rem;
+  margin: 0 auto;
+  border: 1px dashed #d7d7d7;
+  border-radius: 1rem;
+}
+.uploadImage i {
+  padding-top: 0.4rem;
+  height: 8rem;
+  line-height: 8rem;
+  font-size: 6rem;
+  color: #e4e4e4;
+}
+.rectificationDiv {
+  position: relative;
+  height: 12rem;
+}
+.rectificationDiv img {
+  height: 12rem;
+}
+.rectificationDiv i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.rectificationDiv i:hover {
+  color: rgba(255, 0, 0, 0.5);
+}
+.uploadReport {
+  position: relative;
+}
+.uploadReport .avatval {
+  padding: 3px 6px 3px 10px;
+  border: 1px solid #E7EAEC;
+  width: 100%;
+  height: 32px;
+  line-height: 32px;
+  border-left: 3px solid #3FB7EB;
+  background: #FAFAFB;
+  border-radius: 2px;
+  outline: none;
+}
+.uploadReport .avatar {
+  border: 0;
+  display: none;
+}
+.uploadReport .closeIcon {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: #D3D3D3;
+  cursor: pointer;
+}
+.uploadReport .closeIcon:hover {
+  color: #828282;
+}
+.uploadButtons {
+  margin: 20px 60px;
+}

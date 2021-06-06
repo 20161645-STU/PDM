@@ -3,7 +3,7 @@ import { Steps, PageHeader  } from 'antd'
 import './style.less'
 
 import AddDrawings from './add_drawing'
-import DrawsUpload from './drawingUpload'
+import DrawsUpload from '../../publicComponents/upload.jsx'
 
 import { connect } from 'react-redux'
 import { creatNewDrawing } from '../store/actionCreaters'
@@ -16,6 +16,7 @@ class AddDrawingProcess extends Component {
     super(props);
     this.state = {
       current: 0,
+      preStepVisible: false
     };
   }
 
@@ -23,9 +24,12 @@ class AddDrawingProcess extends Component {
     const current = this.state.current + 1;
     this.setState({ current });
     this.props.creatNewDrawing(params)
+    this.setState({
+      preStepVisible: true
+    })
   }
 
-  prev = () => {
+  prev= () => {
     const current = this.state.current - 1;
     this.setState({ current });
   }
@@ -35,8 +39,13 @@ class AddDrawingProcess extends Component {
     this.props.history.push('/app/drawing_manage')
   }
 
+  //发送图纸文档
+  sentDrawDocuemnts = (params) => {
+    console.log(params)
+  }
+
   render() {
-    const { current } = this.state
+    const { current, preStepVisible } = this.state
     const steps = [
       {
         title: '图纸信息填写',
@@ -48,17 +57,20 @@ class AddDrawingProcess extends Component {
       {
         title: '图纸文件上传',
         content: <DrawsUpload
+                    visible={preStepVisible}
                     prev={this.prev}
-                    history={this.props.history}
+                    beginUpload={this.sentDrawDocuemnts}
                   />
       }
     ]
     return (
       <div>
-         <PageHeader
-          onBack={() => this.props.history.push('/app/drawing_manage')}
-          title="返回"
-        />
+        { current === 0 ? 
+          <PageHeader
+            onBack={() => this.props.history.push('/app/drawing_manage')}
+            title="返回"
+          />  : null
+        }
         <div  className="stpes">
           <Steps current={current} size="small" className="steps-header">
             {steps.map(item => (
