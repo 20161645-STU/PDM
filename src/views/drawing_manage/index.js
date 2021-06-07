@@ -75,7 +75,7 @@ class DrawingManage extends Component {
         // this.getAloneDraws(keys[0])
     }
     let params = {
-        drawSelectedKeys: keys[0]
+        selectedKeys: keys[0]
     }
     this.storeSelectedkeys(params)
   }

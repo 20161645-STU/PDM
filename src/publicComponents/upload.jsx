@@ -17,8 +17,6 @@ class Uploads extends Component {
     this.setState({
       uploading: true,
     });
-    // console.log('fileList', this.state.fileList)
-    // console.log('formData', formData)
     this.props.beginUpload(formData)
   };
 

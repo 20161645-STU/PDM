@@ -23,7 +23,7 @@ import AddDrawing from '../../views/drawing_manage/add_drawing';
 import ProgramCreat from '../../views/program_manage/program_creat';
 import ProjectData from '../../views/program_manage/projectdata';
 import ProjectTeam from '../../views/program_manage/projectteam';
-import AddFile from '../../views/file_manage/add_file';
+import AddFileProcess from '../../views/file_manage/addFileProcess';
 import AddFolder from '../../views/my_home/add_folder';
 
 import ModalManage from '../../views/modal_manage/index'
@@ -91,7 +91,7 @@ class App extends Component {
                   <Route exact path={'/app/modal_manage'} render={props => <ModalManage {...props} />} />
                   <Route exact path={'/app/drawing_manage/add_drawing'} render={props => <AddDrawing {...props} />} />
                   <Route exact path={'/app/my_home/add_folder'} render={props => <AddFolder {...props} />} />
-                  <Route exact path={'/app/file_manage/add_file'} render={props => <AddFile {...props} />} />
+                  <Route exact path={'/app/file_manage/add_file_process'} render={props => <AddFileProcess {...props} />} />
                   <Route exact path={'/app/program_manage/program_creat'}render={props => <ProgramCreat {...props} />} />
                   <Route exact path={'/app/program_manage/projectdata'} render={props => <ProjectData {...props} />} />
                   <Route exact path={'/app/program_manage/projectteam'} render={props => <ProjectTeam {...props} />} />
