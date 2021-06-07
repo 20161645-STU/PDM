@@ -3,7 +3,7 @@ import { Tree, Button, Icon, message } from 'antd';
 import './style.less'
 
 import { connect } from 'react-redux';
-import { sentDetilType, storeExpandedKeys, storeSelectedkeys } from '../../components/common/store/actionCreaters'
+import { sentDetilType, storeFileExpandedKeys, storeFileSelectedkeys } from '../../components/common/store/actionCreaters'
 
 import { Model } from '../../dataModule/testBone'
 import { getAllDocumentsUrl, getAloneDocumentUrl } from '../../../src/dataModule/UrlList'
@@ -184,8 +184,8 @@ class FileManage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
-    selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
+    expandedKeys: state.get('commonReducer').get('fileExpandedKeys').toJS(),
+    selectedKeys: state.get('commonReducer').get('fileSelectedkeys').toJS()
   }
 }
 
@@ -193,8 +193,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     sendTypeMes: data => dispatch(sentDetilType(data)),
-    storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
-    storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
+    storeExpandedKeys: data => dispatch(storeFileExpandedKeys(data)),
+    storeSelectedkeys: data => dispatch(storeFileSelectedkeys(data))
   }
 }
 

@@ -44,6 +44,11 @@ class AddDrawingProcess extends Component {
     console.log(params)
   }
 
+  //完成创建
+  finishCreate = () => {
+    this.props.history.push('/app/drawing_manage')
+  }
+
   render() {
     const { current, preStepVisible } = this.state
     const steps = [
@@ -60,6 +65,7 @@ class AddDrawingProcess extends Component {
                     visible={preStepVisible}
                     prev={this.prev}
                     beginUpload={this.sentDrawDocuemnts}
+                    finish={this.finishCreate}
                   />
       }
     ]

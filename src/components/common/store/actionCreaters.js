@@ -28,13 +28,43 @@ export const sentDetilType = data => ({
   data: fromJS(data)
 })
 
-export const storeExpandedKeys = data => ({
-  type: constants.STOREEXPAND,
+export const storeDrawExpandedKeys = data => ({
+  type: constants.STOREDRAWEXPAND,
   data: fromJS(data)
 })
 
-export const storeSelectedkeys = data => ({
-  type: constants.STORESELECT,
+export const storeDrawSelectedkeys = data => ({
+  type: constants.STOREDRAWSELECT,
+  data: fromJS(data)
+})
+
+export const storePartExpandedKeys = data => ({
+  type: constants.STOREPARTEXPAND,
+  data: fromJS(data)
+})
+
+export const storePartSelectedkeys = data => ({
+  type: constants.STOREPARTSELECT,
+  data: fromJS(data)
+})
+
+export const storeProgramExpandedKeys = data => ({
+  type: constants.STOREPROGRAMEXPAND,
+  data: fromJS(data)
+})
+
+export const storePragramSelectedkeys = data => ({
+  type: constants.STOREPROGRAMSELECT,
+  data: fromJS(data)
+})
+
+export const storeFileExpandedKeys = data => ({
+  type: constants.STOREFILEEXPAND,
+  data: fromJS(data)
+})
+
+export const storeFileSelectedkeys = data => ({
+  type: constants.STOREFILESELECT,
   data: fromJS(data)
 })
 

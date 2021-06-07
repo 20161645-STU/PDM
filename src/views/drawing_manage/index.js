@@ -7,7 +7,7 @@ import { getAllDrawsUrl, getAloneDrawUrl } from '../../../src/dataModule/UrlList
 import { getUserName } from '../../../src/publicFunction'
 import './style.less'
 import { connect } from 'react-redux';
-import { sentDetilType, storeExpandedKeys,  storeSelectedkeys } from '../../components/common/store/actionCreaters'
+import { sentDetilType, storeDrawExpandedKeys,  storeDrawSelectedkeys } from '../../components/common/store/actionCreaters'
 
 const { TreeNode, DirectoryTree } = Tree;
 
@@ -26,7 +26,15 @@ class DrawingManage extends Component {
       }, {
           title: '其他图纸',
           key: 2
-      }]
+      }],
+      testData: [{
+        name: 10011,
+        id: 10011
+      },{
+        name: 10012,
+        id: 10012
+      },
+      ]
     }
   }
 
@@ -64,10 +72,10 @@ class DrawingManage extends Component {
         this.setState({
           detail_type: 'drawing'
         })
-        this.getAloneDraws(keys[0])
+        // this.getAloneDraws(keys[0])
     }
     let params = {
-        selectedKeys: keys[0]
+        drawSelectedKeys: keys[0]
     }
     this.storeSelectedkeys(params)
   }
@@ -128,7 +136,7 @@ class DrawingManage extends Component {
   }
 
   render() {
-    const { folderData, drawsDatas } = this.state
+    const { folderData, drawsDatas, testData } = this.state
     const { expandedKeys, selectedKeys } = this.props
     // console.log(expandedKeys, selectedKeys)
     if (expandedKeys.expandedKeys === undefined) {
@@ -167,7 +175,11 @@ class DrawingManage extends Component {
                             )
                         }
                         return null
-                    }) : null}
+                    }) : testData.map((item) => {
+                      return (
+                        <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
+                      )
+                    })}
                 </TreeNode>
               )
           })}
@@ -180,16 +192,16 @@ class DrawingManage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
-    selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
+    expandedKeys: state.get('commonReducer').get('drawExpandedKeys').toJS(),
+    selectedKeys: state.get('commonReducer').get('drawSelectedkeys').toJS()
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     sendTypeMes: data => dispatch(sentDetilType(data)),
-    storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
-    storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
+    storeExpandedKeys: data => dispatch(storeDrawExpandedKeys(data)),
+    storeSelectedkeys: data => dispatch(storeDrawSelectedkeys(data))
   }
 }
 

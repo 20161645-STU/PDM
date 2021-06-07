@@ -62,7 +62,7 @@ class Uploads extends Component {
               {uploading ? '正在上传' : '开始上传'}
           </Button>
           { this.props.visible === true ? <Button onClick={this.props.prev} style={{marginLeft:'20px'}}>上一步</Button> : null }
-          <Button disabled={fileList.length === 0} style={{marginLeft:'20px'}}>完成</Button>
+          <Button disabled={fileList.length === 0} style={{marginLeft:'20px'}} onClick={this.props.finish}>完成</Button>
           </div>
       </div>
     );

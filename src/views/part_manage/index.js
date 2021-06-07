@@ -7,7 +7,7 @@ import { getAllPartsUrl, getAlonePartUrl } from '../../../src/dataModule/UrlList
 
 // import { getUserName } from '../../../src/publicFunction';
 import { connect } from 'react-redux';
-import { sentDetilType, storeExpandedKeys,  storeSelectedkeys } from '../../components/common/store/actionCreaters'
+import { sentDetilType, storePartExpandedKeys,  storePartSelectedkeys } from '../../components/common/store/actionCreaters'
 
 const { DirectoryTree,TreeNode } = Tree;
 const model = new Model()
@@ -172,16 +172,16 @@ class PartManage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
-    selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
+    expandedKeys: state.get('commonReducer').get('partExpandedKeys').toJS(),
+    selectedKeys: state.get('commonReducer').get('partSelectedkeys').toJS()
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     sendTypeMes: data => dispatch(sentDetilType(data)),
-    storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
-    storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
+    storeExpandedKeys: data => dispatch(storePartExpandedKeys(data)),
+    storeSelectedkeys: data => dispatch(storePartSelectedkeys(data))
   }
 }
 

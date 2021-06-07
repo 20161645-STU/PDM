@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './style.less'
 import { Button,Tree, Icon, message } from 'antd';
 import histroy from '../../components/common/history';
-import { sentDetilType, storeExpandedKeys, storeSelectedkeys } from '../../components/common/store/actionCreaters'
+import { sentDetilType, storeProgramExpandedKeys, storePragramSelectedkeys } from '../../components/common/store/actionCreaters'
 
 import { Model } from '../../dataModule/testBone'
 import { getAllProjectUrl, getAloneProjectUrl } from '../../../src/dataModule/UrlList'
@@ -188,16 +188,16 @@ class  ProgramManage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    expandedKeys: state.get('commonReducer').get('expandedKeys').toJS(),
-    selectedKeys: state.get('commonReducer').get('selectedkeys').toJS()
+    expandedKeys: state.get('commonReducer').get('programExpandedKeys').toJS(),
+    selectedKeys: state.get('commonReducer').get('programSelectedkeys').toJS()
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     sendTypeMes: data => dispatch(sentDetilType(data)),
-    storeExpandedKeys: data => dispatch(storeExpandedKeys(data)),
-    storeSelectedkeys: data => dispatch(storeSelectedkeys(data))
+    storeExpandedKeys: data => dispatch(storeProgramExpandedKeys(data)),
+    storeSelectedkeys: data => dispatch(storePragramSelectedkeys(data))
   }
 }
 
