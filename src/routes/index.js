@@ -14,7 +14,6 @@ import App from '../components/common/App';
 import Login from '../components/common/Login';
 import Home from '../components/common/Home';
 import NoMatch from '../components/common/404';
-import MyHome from '../views/my_home';
 
 
 
@@ -27,7 +26,6 @@ class MRoute extends Component {
           <Route exact path="/" component={Home} />
           <Route path="/app" component={App} />
           <Route path="/login" component={Login} />
-          <Route path="/app/my_home" component={MyHome} />
 
           <Route component={NoMatch} />
         </Switch>

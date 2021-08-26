@@ -127,6 +127,8 @@ export default class AntdTable extends Component{
             wordBreak: 'keep-all',
             whiteSpace: 'nowrap'
           }}
+          size='small'
+          bordered
           pagination={false}
           columns={columns}
           dataSource={lastData}
@@ -143,11 +145,13 @@ export default class AntdTable extends Component{
           rowKey={'_id'}
         />
         <Pagination
+          size="small"
           showQuickJumper
           current={lastCurrentPage}
           total={total}
           pageSize={queryParams.pageSize !== undefined ? queryParams.pageSize : pageSize}
           onChange={lastPageChange}
+          pageSizeOptions={['10','20','30','40',]}
           style={{marginTop: '1rem', marginBottom: '1rem'}}
         />
       </div>

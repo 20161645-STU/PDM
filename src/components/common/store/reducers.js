@@ -10,7 +10,20 @@ const defaultState = fromJS({
   fileExpandedKeys: {},
   fileSelectedkeys: {},
   programExpandedKeys: {},
-  programSelectedkeys: {}
+  programSelectedkeys: {},
+  folderExpandedKeys: {},
+  folderSelectedkeys: {},
+  folderContentData: [],
+  projectContentData: [],
+  fileRelationData: [],
+  drawFaRelationInfo: [],
+  drawSonRelationData: [],
+  partSonRelationData: [],
+  dssRelationInfo: [],
+  zssRelationInfo: [],
+  tssRelationInfo: [],
+  fileReallyData: [],
+  drawReallyData: [],
 })
 
 export default (state = defaultState, action) => {
@@ -33,6 +46,32 @@ export default (state = defaultState, action) => {
       return state.set('programExpandedKeys', fromJS(action.data))
     case constants.STOREPROGRAMSELECT:
       return state.set('programSelectedkeys', fromJS(action.data))
+    case constants.STOREFOLDERSXPAND:
+      return state.set('folderExpandedKeys', fromJS(action.data))
+    case constants.STOREFOLDERSELECT:
+      return state.set('folderSelectedkeys', fromJS(action.data))
+    case constants.FOLDERCONTENTDATA:
+      return state.set('folderContentData', fromJS(action.data))
+    case constants.PROJECTCONTENTDATA:
+      return state.set('projectContentData', fromJS(action.data))
+    case constants.FILERELATIONDATA:
+      return state.set('fileRelationData', fromJS(action.data))
+    case constants.DRAWFARELATIONDATA:
+      return state.set('drawFaRelationInfo', fromJS(action.data))
+    case constants.DRAWSONRELATIONDATA:
+      return state.set('drawSonRelationData', fromJS(action.data))
+    case constants.PARTSONRELATIONDATA:
+      return state.set('partSonRelationData', fromJS(action.data))
+    case constants.DSSRELATIONINFO:
+      return state.set('dssRelationInfo', fromJS(action.data))
+    case constants.ZSSRELATIONINFO:
+      return state.set('zssRelationInfo', fromJS(action.data))
+    case constants.TSSRELATIONINFO:
+      return state.set('tssRelationInfo', fromJS(action.data))
+    case constants.FILEREALLYDATA:
+      return state.set('fileReallyData', fromJS(action.data))
+    case constants.DRAWREALLYDATA:
+      return state.set('drawReallyData', fromJS(action.data))
     default:
       return state
   }

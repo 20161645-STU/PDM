@@ -148,5 +148,7 @@
   color: #828282;
 }
 .uploadButtons {
-  margin: 20px 60px;
+  width: 200px;
+  margin-top: 60px;
+  margin-left: 240px;
 }

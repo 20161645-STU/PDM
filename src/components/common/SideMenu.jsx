@@ -6,6 +6,9 @@ import { ProjectOutlined, BlockOutlined, HomeOutlined, FormOutlined, HistoryOutl
 //import { getUserName } from '../../publicFunction';
 //import history from './history';
 
+import store from '../../store'
+import { actionCreators as commonAction } from '../common/store';
+import { actionCreators as viewsAction } from '../../views/store';
 //const { Menu.ItemGroup } = Menu;
 
 export default class SideMenu extends Component {
@@ -18,6 +21,15 @@ export default class SideMenu extends Component {
       current: e.key,
     });
   };
+
+  //初始化redux
+  resetRudex = () => {
+    store.dispatch(commonAction.storeDssRelationInfo([]))
+    store.dispatch(commonAction.storeZssRelationInfo([]))
+    store.dispatch(commonAction.storeTssRelationInfo([]))
+    store.dispatch(commonAction.sentDetilType({}))
+    store.dispatch(viewsAction.createPartBom({}))
+  }
 
   render() {
     return (
@@ -38,6 +50,7 @@ export default class SideMenu extends Component {
         <Menu.ItemGroup
           style={{height: '40px'}}
           key="sub2"
+          onClick={this.resetRudex()}
           title={
             <span style={{color: '#fff', fontSize: '16px'}}>
               <Link to='/app/my_home'>
@@ -50,6 +63,7 @@ export default class SideMenu extends Component {
         <Menu.ItemGroup
           style={{height: '40px'}}
           key="sub3"
+          onClick={this.resetRudex}
           title={
             <span style={{color: '#fff', fontSize: '16px'}}>
               <Link to='/app/program_manage'>
@@ -63,6 +77,7 @@ export default class SideMenu extends Component {
         <Menu.ItemGroup
           style={{height: '40px'}}
           key="sub4"
+          onClick={this.resetRudex()}
           title={
             <span style={{color: '#fff', fontSize: '16px'}}>
                <Link to='/app/part_manage'>
@@ -89,6 +104,7 @@ export default class SideMenu extends Component {
         <Menu.ItemGroup
           style={{height: '40px'}}
           key="sub6"
+          onClick={this.resetRudex()}
           title={
             <span style={{color:'#fff', fontSize: '16px'}}>
                <Link to='/app/drawing_manage'>
@@ -101,7 +117,8 @@ export default class SideMenu extends Component {
         </Menu.ItemGroup>
         <Menu.ItemGroup
           style={{height: '40px'}}
-          key="sub7"
+          key="file_manage"
+          onClick={this.resetRudex()}
           title={
             <span style={{color:'#fff', fontSize: '16px'}}>
                <Link to='/app/file_manage'>
@@ -112,6 +129,19 @@ export default class SideMenu extends Component {
           }
         >
         </Menu.ItemGroup>
+        {/* <Menu.ItemGroup
+          style={{height: '40px'}}
+          key="sub7"
+          title={
+            <span style={{color:'#fff', fontSize: '16px'}}>
+               <Link to='/app/file_manage'>
+               <Icon type="user" />&nbsp;
+              账户管理
+              </Link>
+            </span>
+          }
+        >
+        </Menu.ItemGroup> */}
         </Menu>
     );
   }

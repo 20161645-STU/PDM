@@ -8,7 +8,6 @@ class ProjectDetil extends Component{
     super(props);
     this.state = {
       editModalVisible: false,
-      data: {}
     }
   }
 
@@ -34,32 +33,33 @@ class ProjectDetil extends Component{
     }
     return null
   }
-  
-  handleData = (data) => {
-    if (data !== null) {
-      return data
+
+  handleData = (value) => {
+    if (value === 1) {
+      return '未完结'
+    } else {
+      return '已完结'
     }
-    return null
   }
+ 
 
   render() {
-    const data = this.handleData(this.props.data)
-    // const data = this.state
+    // const data = this.handleData(this.props.data)
+    const data = this.props.data
     // console.log(data)
     return (
       <div style={{margin:'20px'}}>
         <Descriptions
-            title="项目详情"
-            bordered
-            column={1}
-            size={'small'}
+          title="项目详情"
+          column={1}
+          size={'small'}
         >
-          <Descriptions.Item label="项目编号">111</Descriptions.Item>
+          <Descriptions.Item label="项目编号">{ data.project_no}</Descriptions.Item>
           <Descriptions.Item label="项目名称">{data.name}</Descriptions.Item>
           <Descriptions.Item label="项目描述">{data.description}</Descriptions.Item>
           <Descriptions.Item label="项目负责人">{data.admin}</Descriptions.Item>
           <Descriptions.Item label="项目来源">{data.sourcing}</Descriptions.Item>
-          <Descriptions.Item label="项目状态">{data.state}</Descriptions.Item>
+          <Descriptions.Item label="项目状态">{this.handleData(data.status)}</Descriptions.Item>
           <Descriptions.Item label="项目所属组织">{data.projectGroup}</Descriptions.Item>
           <Descriptions.Item label="计划开始时间">{this.handleTime(data.planningStartDate)}</Descriptions.Item>
           <Descriptions.Item label="项目计划周期">{data.planningPeriod}</Descriptions.Item>

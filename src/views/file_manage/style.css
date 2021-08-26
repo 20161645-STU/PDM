@@ -1,5 +1,6 @@
 .file_div {
   display: flex;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 .file_title {
@@ -11,5 +12,7 @@
 }
 .file_create {
   font-size: 15px;
-  margin-left: 280px;
+}
+.treeName {
+  font-size: larger;
 }

@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import { Form,Button,Descriptions,Badge } from 'antd';
+import React, { Component } from 'react'
+import { Form,Button,Descriptions,Badge } from 'antd'
 import './style.less'
 
 class FolderDetail extends Component {
     
     render() {
-        console.log('详情1')
         return(
         <div style={{marginTop:'20px'}}>     
                 <Descriptions title="文件夹详情页" bordered={true}  contentStyle={{color:'white'}}  column={{ xxl: 10, xl: 1, lg: 3, md: 3, sm: 2, xs: 1 }}>

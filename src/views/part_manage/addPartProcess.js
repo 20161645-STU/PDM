@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import { Steps, PageHeader, message  } from 'antd'
 import './style.less'
 
-import AddFiles from './add_file'
+import AddParts from './add_part'
 import FilesUpload from '../../publicComponents/upload.jsx'
 
 import { connect } from 'react-redux'
-import { creatNewFiles } from '../store/actionCreaters'
+import { creatNewParts } from '../store/actionCreaters'
 
 import reqwest from 'reqwest';
 
-import { originalUrl, uploadFilesUrl,createDocumentUrl } from '../../dataModule/UrlList'
+import { originalUrl, uploadFilesUrl, createPartUrl } from '../../dataModule/UrlList'
 import { Model } from '../../../src/dataModule/testBone'
 
 const { Step } = Steps
@@ -29,7 +29,7 @@ class AddFilesProcess extends Component {
     const current = this.state.current + 1;
     this.setState({ current });
     console.log(params)
-    this.props.creatNewFiles(params)
+    this.props.creatNewParts(params)
     this.setState({
       preStepVisible: true
     })
@@ -45,23 +45,22 @@ class AddFilesProcess extends Component {
     const initData = {
       name: '',
       document_type: '',
-      part_code: '',
       project_code: '',
       zss_id: '',
       tag:'',
-      dss_type: ''
+      tss_type: ''
     }
-    this.props.creatNewFiles(initData)
-    this.props.history.push('/app/file_manage')
+    this.props.creatNewParts(initData)
+    this.props.history.push('/app/part_manage')
   }
 
   //发送文档
-  sentFilesDocuemnts = (fileId, formData) => {
+  sentFilesDocuemnts = (partId, formData) => {
     const me = this
   //   for (var value of params.values()) {
   //     console.log(value);
   //  }
-    formData.append('fileId', fileId) 
+    formData.append('fileId', partId) 
     reqwest({
       url: originalUrl + uploadFilesUrl,
       method: 'post',
@@ -74,7 +73,7 @@ class AddFilesProcess extends Component {
             fileList: []
           });
           message.success('文件上传成功');
-          me.props.history.push('/app/file_manage')
+          me.props.history.push('/app/part_manage')
         }
       },
       error: () => {
@@ -83,11 +82,11 @@ class AddFilesProcess extends Component {
     });
   }
 
-   //创建文档描述信息
-  createDocument = (data, formData) => {
+   //创建零件描述信息
+   createParts = (data, formData) => {
     const me = this
-    // console.log('newDocument', data)
-    // for (let i in newDraw) {
+    // console.log('newPart', newPart)
+    // for (let i in newPart) {
     // // if (newDraw[i] === '' || newDraw[i] === undefined) {
     // //     message.error('信息未填写完整！')
     // //     return
@@ -95,23 +94,22 @@ class AddFilesProcess extends Component {
     // }
     model.fetch(
       data,
-      createDocumentUrl,
+      createPartUrl,
       'post',
       function (res) {
-        // console.log(222, res)
-        message.success('创建文档成功！')
+        message.success('创建零件成功！')
         me.sentFilesDocuemnts(res.data, formData)
       },
       function (error) {
-          message.error('创建文档失败！')
+        message.error('创建零件失败！')
       },
       false
-    )
+      )
   }
 
   //完成创建
   finishCreate = (formData) => {
-    this.createDocument(this.props.newFilesData, formData)
+    this.createParts(this.props.newPartsData, formData)
     // this.props.history.push('/app/file_manage')
   }
 
@@ -119,8 +117,8 @@ class AddFilesProcess extends Component {
     const { current, preStepVisible } = this.state
     const steps = [
       {
-        title: '文档信息填写',
-        content: <AddFiles
+        title: '零件信息填写',
+        content: <AddParts
                   next={this.next}
                   history={this.props.history}
                 />
@@ -157,13 +155,13 @@ class AddFilesProcess extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    newFilesData: state.get('viewsReducer').get('newFilesData').toJS(),
+    newPartsData: state.get('viewsReducer').get('newPartsData').toJS(),
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    creatNewFiles: data => dispatch(creatNewFiles(data)),
+    creatNewParts: data => dispatch(creatNewParts(data)),
   }
 }
 

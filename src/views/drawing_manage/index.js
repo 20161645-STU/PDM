@@ -1,13 +1,18 @@
 import React, { Component, Fragment } from 'react';
-import { Tree, Button, message, Icon } from 'antd';
+import { Tree, Button, message } from 'antd';
+
+import store from '../../store'
+import { actionCreators as viewsAction } from '../store';
 
 import { Model } from '../../dataModule/testBone'
-import { getAllDrawsUrl, getAloneDrawUrl } from '../../../src/dataModule/UrlList'
+import { getAloneDrawUrl } from '../../../src/dataModule/UrlList'
 
 import { getUserName } from '../../../src/publicFunction'
 import './style.less'
 import { connect } from 'react-redux';
-import { sentDetilType, storeDrawExpandedKeys,  storeDrawSelectedkeys } from '../../components/common/store/actionCreaters'
+import { sentDetilType, storeDrawExpandedKeys, storeDrawSelectedkeys } from '../../components/common/store/actionCreaters'
+
+import Folder from '../../publicComponents/IconFonts'
 
 const { TreeNode, DirectoryTree } = Tree;
 
@@ -19,48 +24,12 @@ class DrawingManage extends Component {
     super (props);
     this.state = {
       detail_type: '',
-      drawsDatas: [],     //所有的图纸信息
-      folderData: [{
-          title: '我的图纸',
-          key: 1           
-      }, {
-          title: '其他图纸',
-          key: 2
-      }],
-      testData: [{
-        name: 10011,
-        id: 10011
-      },{
-        name: 10012,
-        id: 10012
-      },
-      ]
     }
   }
 
-  //生命周期函数
-  // componentDidMount() {
-  //   this.getAllDraws()
-  // }
-
-  //获取所有图纸数据
-  getAllDraws = () => {
-    let me = this
-    model.fetch(
-        {},
-        getAllDrawsUrl,
-        'get',
-        function (res) {
-          // console.log(res)
-          me.setState({
-              drawsDatas: res.data
-          })
-        },
-        function (error) {
-          message.error('获取图纸信息失败！')
-        },
-        false
-    )
+    //生命周期函数
+  componentDidMount() {
+    store.dispatch(viewsAction.getAllDrawings())  
   }
 
   //查看图纸详情
@@ -72,7 +41,7 @@ class DrawingManage extends Component {
         this.setState({
           detail_type: 'drawing'
         })
-        // this.getAloneDraws(keys[0])
+        this.getAloneDraws(keys[0])
     }
     let params = {
         selectedKeys: keys[0]
@@ -88,11 +57,11 @@ class DrawingManage extends Component {
       getAloneDrawUrl,
       'get',
       function (res) {
-          // console.log(111, res.data[0])
-          me.sentDrawMes( res.data[0])
+        console.log(111, res.data)
+        me.sentDrawMes( res.data)
       },
       function (error) {
-          message.error('获取图纸信息失败！')
+        message.error('获取图纸信息失败！')
       },
       false
     )
@@ -131,14 +100,35 @@ class DrawingManage extends Component {
     this.props.history.push('/app/drawing_manage/add_drawing_process')
   }
 
-  sentDocuments = () => {
-    console.log(11222)
+  //抽离出item级数据
+  handleItemData = (key, params) => {
+    if (key === 'mine') {
+      const myDrawingItemData = params.filter(item => item.createdBy === getUserName() & item.version === 'item')
+      return myDrawingItemData
+    } else {
+      const otherDrawingItemData = params.filter(item => item.createdBy !== getUserName()  & item.version === 'item')
+      return otherDrawingItemData
+    }
+  }
+
+  //抽离出非item级数据
+  handleData = (key, params) => {
+    if (key === 'mine') {
+      const myDrawData = params.filter(item => item.createdBy === getUserName() & item.version !== 'item')
+      return myDrawData
+    } else {
+      const otherDrawingData = params.filter(item => item.createdBy !== getUserName()  & item.version !== 'item')
+      return otherDrawingData
+    }
   }
 
   render() {
-    const { folderData, drawsDatas, testData } = this.state
     const { expandedKeys, selectedKeys } = this.props
-    // console.log(expandedKeys, selectedKeys)
+    const myDrawingItemData = this.handleItemData('mine', this.props.allDrawingsInfo)
+    const otherDrawingItemData = this.handleItemData('', this.props.allDrawingsInfo)
+    const myDrawData = this.handleData('mine', this.props.allDrawingsInfo)
+    const otherDrawingData = this.handleData('', this.props.allDrawingsInfo)
+    // console.log('otherDrawingItemData', otherDrawingItemData)
     if (expandedKeys.expandedKeys === undefined) {
         this.storeExpandedKeys({})
         this.storeSelectedkeys({})
@@ -149,40 +139,53 @@ class DrawingManage extends Component {
               <span className="draw_title">图纸管理</span>
               <Button type="primary" icon="plus"  className="draw_create" onClick={this.createDraws}>创建图纸</Button>
             </div>
-        <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand}
+        <DirectoryTree multiple className="treeName"
+          onSelect={this.getTypeName}
+          onExpand={this.onExpand}
           defaultExpandedKeys={[expandedKeys.expandedKeys]}
           defaultSelectedKeys={[selectedKeys.selectedKeys]}
-          onRightClick={this.sentDocuments}
+          icon={<Folder type="icon-wenjianjia"  style={ { fontSize:'20px', paddingRight:'4px', marginTop:'3px'}}/>}
         >
-          {folderData.map((item,index) => {
-              return (
-                <TreeNode title={item.title} key={index} >
-                    {drawsDatas.length !== 0 ? drawsDatas.map((item) => {
-                        if (item.createdBy === getUserName()) {
-                            return (
-                                <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
-                                // <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="codepen" />}/>
-                                // <TreeNode title={secItem.name} key={secItem.id} >
-                                //     {/* {thirdData.map((thirItem) => {
-                                //         if (thirItem.type === secItem.title) {
-                                //             return (
-                                //                 <TreeNode title={thirItem.title} key={thirItem.key} isLeaf icon={ <Icon type="codepen" />}/>
-                                //            )
-                                //         }
-                                //         return null
-                                //     }) } */}
-                                // </TreeNode>
-                            )
-                        }
-                        return null
-                    }) : testData.map((item) => {
-                      return (
-                        <TreeNode title={item.name} key={item.id} isLeaf icon={ <Icon type="folder" />}/>
-                      )
-                    })}
-                </TreeNode>
-              )
-          })}
+          <TreeNode title="我的图纸" key="0">
+              {myDrawingItemData.length !== 0 ? myDrawingItemData.map((item) => {
+                return (
+                  <TreeNode title={item.drawingNo + '-' + item.name} key={item.id} 
+                    icon={<Folder type="icon-draw" style={{ fontSize: '18px', paddingRight: '4px' }} />}
+                  >
+                    {myDrawData.length !== 0 ? myDrawData.map((params) => {
+                      if (params.drawingNo === item.drawingNo) {
+                        return (
+                          <TreeNode title={params.drawingNo + '-' + params.name + '/' + params.version} key={params.id} isLeaf
+                            icon={<Folder type="icon-draw" style={{ fontSize: '18px', paddingRight: '4px' }} />}
+                          />
+                          )
+                      }
+                      return null
+                    }) : null}
+                  </TreeNode>
+                )
+              }) : null }
+            </TreeNode>
+            <TreeNode title="其他图纸" key="1">
+              {otherDrawingItemData.length !== 0 ? otherDrawingItemData.map((item) => {
+                return (
+                  <TreeNode title={item.drawingNo + '-' + item.name} key={item.id} 
+                    icon={<Folder type="icon-draw" style={{ fontSize: '18px', paddingRight: '4px' }} />}
+                  >
+                     {otherDrawingData.length !== 0 ? otherDrawingData.map((params) => {
+                      if (params.drawingNo === item.drawingNo) {
+                        return (
+                          <TreeNode title={params.drawingNo + '-' + params.name + '/' + params.version} key={params.id} isLeaf
+                            icon={<Folder type="icon-draw" style={{ fontSize: '18px', paddingRight: '4px' }} />}
+                          />
+                          )
+                      }
+                      return null
+                    }) : null}
+                  </TreeNode>
+                )
+              }) : null }
+            </TreeNode>
         </DirectoryTree>
       </Fragment>
     )
@@ -193,7 +196,8 @@ class DrawingManage extends Component {
 const mapStateToProps = (state) => {
   return {
     expandedKeys: state.get('commonReducer').get('drawExpandedKeys').toJS(),
-    selectedKeys: state.get('commonReducer').get('drawSelectedkeys').toJS()
+    selectedKeys: state.get('commonReducer').get('drawSelectedkeys').toJS(),
+    allDrawingsInfo: state.get('viewsReducer').get('allDrawingsInfo').toJS(),
   }
 }
 

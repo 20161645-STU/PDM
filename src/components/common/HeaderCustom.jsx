@@ -67,7 +67,7 @@ class HeaderCustom extends Component{
       return(
         <Header className="header-style header">
           <img alt="logo" src={logo}/>
-            <span className={'header-span'}>PDM 系统</span>
+            <span className={'header-span'}>P D M 系统</span>
           <span className="date-span">{this.state.date.toLocaleString()}</span>
           <div className={"user-icon-div"}>
             <Dropdown overlay={menu}>

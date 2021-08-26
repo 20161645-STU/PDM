@@ -1,12 +1,24 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
 import './style.less'
-import { Button,Tree, Icon, message } from 'antd';
+import { Button,Tree, message } from 'antd';
 import histroy from '../../components/common/history';
-import { sentDetilType, storeProgramExpandedKeys, storePragramSelectedkeys } from '../../components/common/store/actionCreaters'
+import { getUserName } from '../../publicFunction/index'
+
+import { connect } from 'react-redux';
+import {
+  sentDetilType,
+  storeProgramExpandedKeys,
+  storePragramSelectedkeys,
+} from '../../components/common/store/actionCreaters'
 
 import { Model } from '../../dataModule/testBone'
-import { getAllProjectUrl, getAloneProjectUrl } from '../../../src/dataModule/UrlList'
+import { getAloneProjectUrl, getProjectContentUrl } from '../../../src/dataModule/UrlList'
+
+import Folder from '../../publicComponents/IconFonts'
+
+import store from '../../store'
+import { actionCreators as viewsAction } from '../store';
+import { actionCreators as commonAction } from '../../components/common/store';
 
 const model = new Model()
 const { TreeNode, DirectoryTree } = Tree;
@@ -15,50 +27,14 @@ class  ProgramManage extends Component {
   constructor(props) {
     super (props);
     this.state = {
-      folderData: [{
-          title: '我的项目',
-          key: 1           
-      }, {
-          title: '其他项目',
-          key: 2
-        }],
-      testData: [
-        {
-          name: '南通项目',
-          id: '12345678'
-        },{
-          name: '大宗项目',
-          id: '87654321'
-        }
-      ],     //测试数据
       projectsData: [],
       detail_type: ''         //详情类型
     }
   }
 
-  //生命周期函数
-  // componentDidMount() {
-  //   this.getAllProjects()
-  // }
-
-  //获取所有项目数据
-  getAllProjects = () => {
-    let me = this
-    model.fetch(
-      {},
-      getAllProjectUrl,
-      'get',
-      function (res) {
-          // console.log(res)
-          me.setState({
-              projectsData: res.data
-          })
-      },
-      function (error) {
-          message.error('获取项目信息失败！')
-      },
-      false
-    )
+   //生命周期函数
+  componentDidMount() {
+    store.dispatch(viewsAction.getAllProjects())  
   }
 
   //创建项目
@@ -73,21 +49,38 @@ class  ProgramManage extends Component {
       console.log('id', keys);
     }
     else if (keys[0].substring(keys[0].length - 2, keys[0].length) === '01') {
+      this.storeSelectedkeys({ selectedKeys: keys[0].substring(0, keys[0].length - 2) })
       histroy.push('/app/program_manage/projectdata')
-      this.storeSelectedkeys({selectedKeys:keys[0].substring(0, keys[0].length-2)})
     } else if (keys[0].substring(keys[0].length - 2, keys[0].length) === '02') {
+      this.storeSelectedkeys({ selectedKeys: keys[0].substring(0, keys[0].length - 2) })
       histroy.push('/app/program_manage/projectteam')
-      this.storeSelectedkeys({selectedKeys:keys[0].substring(0, keys[0].length-2)})
     } else {
-      this.setState({
-        detail_type: 'program'
-      })
-      // this.getAloneProject(keys[0])
-      let params = {
-        selectedKeys: keys[0]
-      }
-      this.storeSelectedkeys(params)
+      this.getAloneProject(keys[0])
+      this.getProjectContentId({ id: keys[0] })
+      this.storeSelectedkeys({  selectedKeys: keys[0] })
     }
+  }
+
+  //获取项目所有内容的id
+  getProjectContentId = (params) => {
+    model.fetch(
+      {folder_id: params.id},
+      getProjectContentUrl,
+      'get',
+      function (res) {
+        console.log('id', res.data)
+        if (res.data.length !== 0) {
+          store.dispatch(commonAction.getFolderContentId('project', res.data)) 
+        } else {
+          store.dispatch(commonAction.sentFoldersContent('project', [])) 
+        }
+      },
+      function () {
+        // console.log(111)
+        // message.error('获取文件夹内容失败！')
+      },
+      false
+    )
   }
 
   // 获得单个项目的详细信息
@@ -98,8 +91,8 @@ class  ProgramManage extends Component {
       getAloneProjectUrl,
       'get',
       function (res) {
-          // console.log(111, res.data[0])
-          me.sentProjectMes( res.data[0])
+          // console.log('aloneProjectDatas', res.data)
+          me.sentProjectMes( res.data)
       },
       function (error) {
           message.error('获取图纸信息失败！')
@@ -110,9 +103,8 @@ class  ProgramManage extends Component {
 
   //给rendux发送文件类型
   sentProjectMes = (aloneProjectDatas) => {
-    const { detail_type } = this.state
     let params = {
-        detail_type,
+        detail_type: 'program',
         aloneProjectDatas  //单个项目详情
     }
     // console.log(params)
@@ -137,11 +129,26 @@ class  ProgramManage extends Component {
     this.props.storeSelectedkeys(params)
   }
 
+  //数据处理
+   
+  handleData = (key, params) => {
+    if (key === 'mine') {
+      const myProjectsData = params.filter(item => item.admin === getUserName())
+      return myProjectsData
+    } else {
+      const otherProjectsData = params.filter(item => item.admin !== getUserName())
+      return otherProjectsData
+    }
+  }
+
     
   render() {
-    const { folderData, projectsData, testData } = this.state
     const { expandedKeys, selectedKeys } = this.props
-    // console.log(expandedKeys, selectedKeys)
+
+    const myProjectsData = this.handleData('mine', this.props.allProjectsInfo)
+    const otherProjectsData = this.handleData('', this.props.allProjectsInfo)
+    // console.log('otherProjectsData', otherProjectsData)
+
     if (expandedKeys.expandedKeys === undefined) {
         this.storeExpandedKeys({})
         this.storeSelectedkeys({})
@@ -149,37 +156,45 @@ class  ProgramManage extends Component {
 
     return (
       <Fragment>
-        <div style={{display:'flex',marginBottom:'20px'}}>
-          <span className="project_title">项目管理</span>
-          <Button type="primary" icon="plus"  className="project_create" onClick={this.createDraws}>创建项目</Button>
+        <div  className="file_div">
+          <span className="file_title">项目管理</span>
+          <Button type="primary" icon="plus" className="file_create" onClick={this.createDraws}>创建项目</Button>
         </div>
-        <DirectoryTree multiple onSelect={this.getTypeName} onExpand={this.onExpand}
+        <DirectoryTree multiple className="treeName"
+          onSelect={this.getTypeName}
+          onExpand={this.onExpand}
           defaultExpandedKeys={[expandedKeys.expandedKeys]}
-          defaultSelectedKeys={[selectedKeys.selectedKeys]}>
-          {folderData.map((item,index) => {
-            return (
-              <TreeNode title={item.title} key={index}>
-                  {projectsData.length !== 0 ? projectsData.map((item) => {
-                      if (true) {
-                        return (
-                          <TreeNode title={item.name} key={item.id} >
-                            <TreeNode title={'program data'} key={item.id + '01'} isLeaf icon={<Icon type="file-pdf" />} />
-                            <TreeNode title={'program team'} key={item.id + '02'} isLeaf icon={ <Icon type="team" />}/>
-                          </TreeNode>
-                        )
-                      }
-                      return null
-                  }) : testData.map((item) => {
-                    return (
-                      <TreeNode title={item.name} key={item.id} >
-                        <TreeNode title={'program data'} key={item.id + '01'} isLeaf icon={<Icon type="file-pdf" />} />
-                        <TreeNode title={'program team'} key={ item.id + '02'} isLeaf icon={ <Icon type="team" />} />
-                      </TreeNode>
-                    )
-                  })}
-              </TreeNode>
-            )
-          })}
+          defaultSelectedKeys={[selectedKeys.selectedKeys]}
+          icon={<Folder type="icon-wenjianjia"  style={ { fontSize:'20px', paddingRight:'4px', marginTop:'3px'}}/>}
+        >
+          <TreeNode title="我的项目" key="0">
+            {myProjectsData.length !== 0 ? myProjectsData.map((item) => {
+              return (
+                <TreeNode title={item.project_no + '-' + item.name} key={item.id} 
+                  icon={<Folder type="icon-xiangmu1"  style={ { fontSize:'18px', paddingRight:'4px', marginTop:'2px'}}/>}
+                >
+                  <TreeNode title={'program data'} key={item.id + '01'} isLeaf
+                    icon={<Folder type="icon-data"  style={ { fontSize:'20px', paddingRight:'4px', marginTop:'3px'}}/>} />
+                  <TreeNode title={'program team'} key={item.id + '02'} isLeaf
+                    icon={<Folder type="icon-team"  style={ { fontSize:'20px', paddingRight:'4px', marginTop:'3px'}}/>} />
+                </TreeNode>
+              )
+            }) : null }
+          </TreeNode>
+          <TreeNode title="其他项目" key="1">
+            {otherProjectsData.length !== 0 ? otherProjectsData.map((item) => {
+              return (
+                <TreeNode title={item.project_no + '-' + item.name} key={item.id} 
+                  icon={<Folder type="icon-xiangmu1"  style={ { fontSize:'18px', paddingRight:'4px', marginTop:'2px'}}/>}
+                >
+                  <TreeNode title={'program data'} key={item.id + '01'} isLeaf
+                    icon={<Folder type="icon-data"  style={ { fontSize:'20px', paddingRight:'4px', marginTop:'3px'}}/>} />
+                  <TreeNode title={'program team'} key={item.id + '02'} isLeaf
+                    icon={<Folder type="icon-team"  style={ { fontSize:'20px', paddingRight:'4px', marginTop:'3px'}}/>} />
+                </TreeNode>
+              )
+            }) : null }
+          </TreeNode>
         </DirectoryTree>
       </Fragment>
     )
@@ -189,7 +204,8 @@ class  ProgramManage extends Component {
 const mapStateToProps = (state) => {
   return {
     expandedKeys: state.get('commonReducer').get('programExpandedKeys').toJS(),
-    selectedKeys: state.get('commonReducer').get('programSelectedkeys').toJS()
+    selectedKeys: state.get('commonReducer').get('programSelectedkeys').toJS(),
+    allProjectsInfo: state.get('viewsReducer').get('allProjectsInfo').toJS(),
   }
 }
 

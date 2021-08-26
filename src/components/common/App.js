@@ -9,24 +9,26 @@ import SideMenu from './SideMenu'
 import InformationPage from './InformationPage'
 import HeaderCustom from './HeaderCustom';
 import Index from '../index/index';
-import noMatch from './404';
+import NotMatch from './404';
 
 import '../../style/index.less';
-import MyHome from '../../views/my_home';
-import ProgramManage from '../../views/program_manage';
-import PartManage from '../../views/part_manage';
+import MyHome from '../../views/my_home/index';
+import AddFolder from '../../views/my_home/add_folder';
+
 import DrawingManage from '../../views/drawing_manage';
 import AddDrawingProcess from '../../views/drawing_manage/addDrawProcess'
+
 import FileManage from '../../views/file_manage';
-import AddPart from '../../views/part_manage/add_part';
-import AddDrawing from '../../views/drawing_manage/add_drawing';
+import AddFileProcess from '../../views/file_manage/addFileProcess';
+
+import PartManage from '../../views/part_manage';
+import AddPartProcess from '../../views/part_manage/addPartProcess';
+
+import ProgramManage from '../../views/program_manage';
 import ProgramCreat from '../../views/program_manage/program_creat';
 import ProjectData from '../../views/program_manage/projectdata';
 import ProjectTeam from '../../views/program_manage/projectteam';
-import AddFileProcess from '../../views/file_manage/addFileProcess';
-import AddFolder from '../../views/my_home/add_folder';
 
-import ModalManage from '../../views/modal_manage/index'
 
 
 
@@ -82,20 +84,22 @@ class App extends Component {
                 <Switch>
                   <Route exact path={'/app'} render={props => <Index {...props} />} />
                   <Route exact path={'/app/my_home'} render={props => <MyHome {...props} />} />
-                  <Route exact path={'/app/program_manage'}  render={props => <ProgramManage {...props} />} />
+                  <Route exact path={'/app/my_home/add_folder'} render={props => <AddFolder {...props} />} />
+
                   <Route exact path={'/app/part_manage'}  render={props => <PartManage {...props} />} />
+                   <Route exact path={'/app/part_manage/add_part_process'} render={props => <AddPartProcess {...props} />} />
+
                   <Route exact path={'/app/drawing_manage'} render={props => <DrawingManage {...props} />} />
                   <Route exact path={'/app/drawing_manage/add_drawing_process'} render={props => <AddDrawingProcess {...props} />} />
+
                   <Route exact path={'/app/file_manage'}  render={props => <FileManage {...props} />} />
-                  <Route exact path={'/app/part_manage/add_part'} render={props => <AddPart {...props} />} />
-                  <Route exact path={'/app/modal_manage'} render={props => <ModalManage {...props} />} />
-                  <Route exact path={'/app/drawing_manage/add_drawing'} render={props => <AddDrawing {...props} />} />
-                  <Route exact path={'/app/my_home/add_folder'} render={props => <AddFolder {...props} />} />
-                  <Route exact path={'/app/file_manage/add_file_process'} render={props => <AddFileProcess {...props} />} />
+                   <Route exact path={'/app/file_manage/add_file_process'} render={props => <AddFileProcess {...props} />} />
+                                
+                  <Route exact path={'/app/program_manage'}  render={props => <ProgramManage {...props} />} />
                   <Route exact path={'/app/program_manage/program_creat'}render={props => <ProgramCreat {...props} />} />
                   <Route exact path={'/app/program_manage/projectdata'} render={props => <ProjectData {...props} />} />
                   <Route exact path={'/app/program_manage/projectteam'} render={props => <ProjectTeam {...props} />} />
-                  <Route component={noMatch} />
+                  <Route exact path={ '/notFound' } render ={ props => <NotMatch {...props}/>} />
                 </Switch>
               </Content>
               <Sider  style={{padding: '0 24px', minHeight: 'calc(100vh - 111px)',  marginTop: '3rem', borderLeft:'1px solid 	#DCDCDC'}} width={'50%'} theme={'light'}>
