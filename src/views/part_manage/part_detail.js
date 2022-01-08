@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { Descriptions, Tabs } from 'antd';
+import { Descriptions, Tabs, Button } from 'antd';
 
 import store from '../../store'
-import { actionCreators as commonAction } from '../../components/common/store';
+import { actionCreators as commonAction } from '../../components/common/store'
+import { connect } from 'react-redux'
 
 import Folder from '../../publicComponents/IconFonts'
 import PartCollapse from '../../publicComponents/collapse.jsx'
+
+import PartEditModal from './editPartModal'
+import PartDataList from '../../publicComponents/dataList'
 
 const { TabPane } = Tabs;
 
@@ -13,7 +17,8 @@ class PartDetil extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      activeKey: '1'
+      activeKey: '1',
+      part_visible: false
     }
   }
 
@@ -49,12 +54,31 @@ class PartDetil extends Component{
       store.dispatch(commonAction.getDrawSonRelations())
       store.dispatch(commonAction.getDrawFaRelations())
       store.dispatch(commonAction.getPartSonRelations(this.props.data.id))
+      store.dispatch(commonAction.getPartFaRelations(this.props.data.id))
+    } else {
+      store.dispatch(commonAction.getPartReallyData(this.props.data.id))
     }
   }
 
+  //打开编辑弹窗
+  editPartMes = () => {
+    store.dispatch(commonAction.getPartFaRelations(this.props.data.id))
+    this.setState({
+      part_visible: true
+    })
+  }
+
+  //关闭弹窗
+  cancle = () => {
+    this.setState({
+      part_visible: false
+    })
+  }
+
   render() {
-      const { data } = this.props
-      // console.log(data)
+    const { data } = this.props
+    const { part_visible} = this.state
+    // console.log('data', data)
     return (
       <div style={{margin:'20px'}}>
         <Tabs onChange={this.callback} type="card" activeKey={this.state.activeKey}>
@@ -93,7 +117,17 @@ class PartDetil extends Component{
                 <Descriptions.Item label="最后修改缘由">{data.modifiedReason}</Descriptions.Item>
                 <Descriptions.Item label="最后修改时间">{ data.modifyDate}</Descriptions.Item>
             </Descriptions>
-           </div>
+            </div>
+            {data.version === 'item' ? null :
+              <div style={{margin: '40px'}}>
+                <Button size="small" icon="edit" onClick={this.editPartMes}>编辑</Button>
+              </div>
+            }
+            <PartEditModal
+              visible={part_visible}
+              part_datas={data}
+              cancleModal={this.cancle}
+            />
          </TabPane>
            <TabPane
               tab={
@@ -105,7 +139,9 @@ class PartDetil extends Component{
              key="2"
            >
            <div>
-             <PartCollapse/>
+              <PartCollapse
+                activeKey={data.partNo}
+              />
            </div>
          </TabPane>
            <TabPane
@@ -117,7 +153,9 @@ class PartDetil extends Component{
              }
              key="3" 
            >
-           Content of Tab Pane 3
+            <PartDataList
+              data={this.props.partReallyData}
+            />
          </TabPane>
        </Tabs>
       </div>
@@ -125,4 +163,10 @@ class PartDetil extends Component{
   }
 }
 
-export default PartDetil
+const mapStateToProps = (state) => {
+  return {
+    partReallyData: state.get('commonReducer').get('partReallyData').toJS(),
+  }
+}
+
+export default connect(mapStateToProps, null)(PartDetil)

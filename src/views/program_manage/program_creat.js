@@ -115,12 +115,15 @@ class ProgramCreat extends Component {
       },
     }
 
+    const folderData = this.props
+
     return (
       <Fragment>
-        <PageHeader
-          onBack={() =>  this.props.history.push('/app/program_manage')}
-          title="返回"
-        />
+        {folderData['folderData'] === 'folder' ? null 
+       :  <PageHeader
+            onBack={() =>  this.props.history.push('/app/program_manage')}
+            title="返回"
+          />}
         <Form onSubmit={this.handleSubmit} style={{marginTop:'30px'}} { ...formItemLayout }>
           <Form.Item
             label="项目名称"
@@ -133,6 +136,7 @@ class ProgramCreat extends Component {
                 style={{ width: '300px'}}
                 onChange={e => this.handChange('name', e.target.value)}
                 allowClear
+                autoComplete='off'
               />
             )}
           </Form.Item>
@@ -206,6 +210,7 @@ class ProgramCreat extends Component {
                 style={{ width: '300px' }}
                 onChange={e => this.handChange('planning_period', e.target.value)}
                 allowClear
+                autoComplete='off'
               />
             )}
           </Form.Item>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Descriptions } from 'antd';
+import { Tabs, Descriptions, Button } from 'antd';
 
 // import { Model } from '../../dataModule/testBone'
 // import { getFileFaRelationUrl } from '../../../src/dataModule/UrlList'
@@ -13,6 +13,8 @@ import FileCollapse from '../../publicComponents/collapse.jsx'
 import Folder from '../../publicComponents/IconFonts'
 import FileDataList from '../../publicComponents/dataList.jsx'
 
+import FileEditModal from './editModal'
+
 const { TabPane } = Tabs;
 // const model = new Model()
 
@@ -20,10 +22,10 @@ class DocumentDetil extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      activeKey: '1'
+      activeKey: '1',
+      file_visible: false
     }
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (this.props.data.documentNo !== nextProps.data.documentNo) {
@@ -33,8 +35,6 @@ class DocumentDetil extends Component{
       })
     }
   }
-
-
 
   //数据转换
   handleChange = (type) => {
@@ -54,14 +54,30 @@ class DocumentDetil extends Component{
       store.dispatch(commonAction.getFileFaRelations(this.props.data.id))
       store.dispatch(commonAction.getDrawSonRelations())
       store.dispatch(commonAction.getPartSonRelations())
-    }  else {
+    } else {
       store.dispatch(commonAction.getFileReallyData(this.props.data.id))
     }
   }
 
+  //打开编辑弹窗
+  editFileMes = () => {
+    store.dispatch(commonAction.getFileFaRelations(this.props.data.id))
+    this.setState({
+      file_visible: true
+    })
+  }
+
+  //关闭弹窗
+  cancle = () => {
+    this.setState({
+      file_visible: false
+    })
+  }
+
   render() {
     const { data } = this.props
-    // console.log('activeKey', this.state.activeKey)
+    const { file_visible} = this.state
+    // console.log('data', data)
     return (
       <div style={{ margin: '20px' }}>
         <Tabs onChange={this.callback} type="card" activeKey={this.state.activeKey} >
@@ -81,7 +97,7 @@ class DocumentDetil extends Component{
                 <Descriptions.Item label="文档版本">{data.version}</Descriptions.Item>
                 <Descriptions.Item label="创建时间">{data.createDate}</Descriptions.Item>
                 <Descriptions.Item label="创建人">{data.createdBy}</Descriptions.Item>
-                <Descriptions.Item label="产品组">{data.productGroup}</Descriptions.Item>
+                {/* <Descriptions.Item label="产品组">{data.productGroup}</Descriptions.Item> */}
                 <Descriptions.Item label="文档描述">{data.tag}</Descriptions.Item>
                 <Descriptions.Item label="是否冻结">{ this.handleChange(data.frozen)}</Descriptions.Item>
                 <Descriptions.Item label="是否审查">{ this.handleChange(data.reviewed)}</Descriptions.Item>
@@ -94,6 +110,14 @@ class DocumentDetil extends Component{
                 <Descriptions.Item label="最后修改时间">{ data.modifyDate}</Descriptions.Item>
               </Descriptions>
             </div>
+            <div style={{margin: '40px'}}>
+              <Button size="small" icon="edit" onClick={this.editFileMes}>编辑</Button>
+            </div>
+            <FileEditModal
+              visible={file_visible}
+              cancleModal={this.cancle}
+              file_datas={data}
+            />
           </TabPane>
           <TabPane
             tab={
@@ -119,7 +143,9 @@ class DocumentDetil extends Component{
            }
             key="3"
           >
-            <FileDataList/>
+            <FileDataList
+              data={this.props.fileReallyData}
+            />
           </TabPane>
         </Tabs>
     </div>
@@ -127,6 +153,10 @@ class DocumentDetil extends Component{
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    fileReallyData: state.get('commonReducer').get('fileReallyData').toJS(),
+  }
+}
 
-
-export default  connect(null, null)(DocumentDetil)
+export default  connect(mapStateToProps, null)(DocumentDetil)

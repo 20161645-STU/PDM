@@ -5,19 +5,15 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getDrawReallyData = exports.getFileReallyData = exports.storeTssRelationInfo = exports.storeZssRelationInfo = exports.storeDssRelationInfo = exports.getPartSonRelations = exports.getDrawSonRelations = exports.getDrawFaRelations = exports.getFileFaRelations = exports.getFolderContentId = exports.sentFoldersContent = exports.storeFolderSelectedkeys = exports.storeFolderExpandedKeys = exports.storeFileSelectedkeys = exports.storeFileExpandedKeys = exports.storePragramSelectedkeys = exports.storeProgramExpandedKeys = exports.storePartSelectedkeys = exports.storePartExpandedKeys = exports.storeDrawSelectedkeys = exports.storeDrawExpandedKeys = exports.sentDetilType = exports.getAllBillTypes = void 0;
+exports.getPartReallyData = exports.getDrawReallyData = exports.getFileReallyData = exports.storeProjectRelationInfo = exports.storeTssRelationInfo = exports.storeZssRelationInfo = exports.storeDssRelationInfo = exports.getPartSonRelations = exports.getPartFaRelations = exports.getDrawSonRelations = exports.getDrawFaRelations = exports.getFileFaRelations = exports.storeProjectAllDatas = exports.storeFolderAllDatas = exports.storeFolderSelectedkeys = exports.storeFolderExpandedKeys = exports.storeFileSelectedkeys = exports.storeFileExpandedKeys = exports.storePragramSelectedkeys = exports.storeProgramExpandedKeys = exports.storePartSelectedkeys = exports.storePartExpandedKeys = exports.storeDrawSelectedkeys = exports.storeDrawExpandedKeys = exports.sentDetilType = exports.getAllBillTypes = void 0;
 
 var constants = _interopRequireWildcard(require("./constants"));
 
 var _immutable = require("immutable");
 
-var _store = _interopRequireDefault(require("../../../store"));
-
 var _testBone = require("../../../dataModule/testBone");
 
 var _UrlList = require("../../../dataModule/UrlList");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -146,7 +142,7 @@ var storeFolderSelectedkeys = function storeFolderSelectedkeys(data) {
 
 exports.storeFolderSelectedkeys = storeFolderSelectedkeys;
 
-var folderDatas = function folderDatas(result) {
+var storeFolderAllDatas = function storeFolderAllDatas(result) {
   return {
     type: constants.FOLDERCONTENTDATA,
     data: result
@@ -154,107 +150,17 @@ var folderDatas = function folderDatas(result) {
 }; //项目所有数据
 
 
-var projectAllDatas = function projectAllDatas(result) {
+exports.storeFolderAllDatas = storeFolderAllDatas;
+
+var storeProjectAllDatas = function storeProjectAllDatas(result) {
   return {
     type: constants.PROJECTCONTENTDATA,
     data: result
   };
-};
-
-var sentFoldersContent = function sentFoldersContent(key, params) {
-  if (key === 'folder') {
-    return function (dispatch) {
-      // console.log('datas', params)
-      dispatch(folderDatas(params));
-    };
-  } else if (key === 'project') {
-    return function (dispatch) {
-      console.log('project_datas', params);
-      dispatch(projectAllDatas(params));
-    };
-  }
-}; //根据id去获取文件夹或项目里的具体内容
-
-
-exports.sentFoldersContent = sentFoldersContent;
-
-var getFolderContentId = function getFolderContentId(key, params) {
-  // console.log('params', params)
-  var folderContentData = [];
-
-  var _loop = function _loop(i) {
-    if (params[i].relationType === 'folder_own_zss' || params[i].relationType === 'project_own_zss') {
-      model.fetch({
-        id: params[i].target
-      }, _UrlList.getAloneDrawUrl, 'get', function (res) {
-        folderContentData.push(res.data);
-
-        if (i === params.length - 1) {
-          _store["default"].dispatch(sentFoldersContent(key, folderContentData));
-        }
-      }, function () {
-        console.log('error');
-      }, false);
-    } else if (params[i].relationType === 'folder_own_tss' || params[i].relationType === 'project_own_tss') {
-      model.fetch({
-        id: params[i].target
-      }, _UrlList.getAlonePartUrl, 'get', function (res) {
-        folderContentData.push(res.data);
-
-        if (i === params.length - 1) {
-          _store["default"].dispatch(sentFoldersContent(key, folderContentData));
-        }
-      }, function () {
-        console.log('error');
-      }, false);
-    } else if (params[i].relationType === 'folder_own_dss' || params[i].relationType === 'project_own_dss') {
-      model.fetch({
-        id: params[i].target
-      }, _UrlList.getAloneDocumentUrl, 'get', function (res) {
-        folderContentData.push(res.data);
-
-        if (i === params.length - 1) {
-          _store["default"].dispatch(sentFoldersContent(key, folderContentData));
-        }
-      }, function () {
-        console.log('error');
-      }, false);
-    } else if (params[i].relationType === 'folder_own_project' || params[i].relationType === 'project_own_project') {
-      model.fetch({
-        id: params[i].target
-      }, _UrlList.getAloneProjectUrl, 'get', function (res) {
-        // console.log(555511, res.data)
-        folderContentData.push(res.data);
-
-        if (i === params.length - 1) {
-          _store["default"].dispatch(sentFoldersContent(key, folderContentData));
-        }
-      }, function () {
-        console.log('error');
-      }, false);
-    } else if (params[i].relationType === 'folder_own_folder' || params[i].relationType === 'project_own_folder') {
-      model.fetch({
-        id: params[i].target
-      }, _UrlList.getAloneFolderUrl, 'get', function (res) {
-        // console.log(66667777, res.data)
-        folderContentData.push(res.data);
-
-        if (i === params.length - 1) {
-          _store["default"].dispatch(sentFoldersContent(key, folderContentData));
-        }
-      }, function () {
-        console.log('error');
-      }, false);
-    }
-  };
-
-  for (var i = 0; i < params.length; i++) {
-    _loop(i);
-  }
 }; //文档关联数据
 
 
-exports.getFolderContentId = getFolderContentId;
+exports.storeProjectAllDatas = storeProjectAllDatas;
 
 var fileRelationInfo = function fileRelationInfo(result) {
   return {
@@ -326,10 +232,35 @@ var getDrawSonRelations = function getDrawSonRelations(params) {
       console.log('获取图纸关联信息失败！');
     }, false);
   };
-}; //获取零件子关联数据
+}; //获取零件父关联数据
 
 
 exports.getDrawSonRelations = getDrawSonRelations;
+
+var partFaRelationInfo = function partFaRelationInfo(result) {
+  return {
+    type: constants.PARTFARELATIONDATA,
+    data: result
+  };
+}; //获取零件的父关联数据
+
+
+var getPartFaRelations = function getPartFaRelations(params) {
+  return function (dispatch) {
+    model.fetch({
+      target: params
+    }, _UrlList.getPartFaRelationUrl, 'get', function (res) {
+      // console.log('父关联数据', res.data)
+      var result = res.data;
+      dispatch(partFaRelationInfo(result));
+    }, function () {
+      console.log('获取零件关联信息失败！');
+    }, false);
+  };
+}; //获取零件子关联数据
+
+
+exports.getPartFaRelations = getPartFaRelations;
 
 var partSonRelationInfo = function partSonRelationInfo(result) {
   return {
@@ -381,10 +312,20 @@ var storeTssRelationInfo = function storeTssRelationInfo(data) {
     type: constants.TSSRELATIONINFO,
     data: (0, _immutable.fromJS)(data)
   };
-}; //获取文档真实数据
+}; //存储项目关联数据
 
 
 exports.storeTssRelationInfo = storeTssRelationInfo;
+
+var storeProjectRelationInfo = function storeProjectRelationInfo(data) {
+  return {
+    type: constants.PROJECTRELATIONINFO,
+    data: (0, _immutable.fromJS)(data)
+  };
+}; //获取文档真实数据
+
+
+exports.storeProjectRelationInfo = storeProjectRelationInfo;
 
 var fileReallyData = function fileReallyData(result) {
   return {
@@ -422,13 +363,37 @@ var getDrawReallyData = function getDrawReallyData(params) {
   // console.log(params)
   return function (dispatch) {
     model.fetch({}, "".concat(_UrlList.getFileReallyDataUrl).concat(params), 'get', function (res) {
-      console.log('datatrue', res);
+      // console.log('datatrue', res)
       var result = res.data;
       dispatch(drawReallyData(result));
     }, function () {
       console.log('获取图纸信息失败！');
     }, false);
   };
-};
+}; //获取零件真实数据
+
 
 exports.getDrawReallyData = getDrawReallyData;
+
+var partReallyData = function partReallyData(result) {
+  return {
+    type: constants.PARTREALLYDATA,
+    data: result
+  };
+}; //获取零件magodb的数据
+
+
+var getPartReallyData = function getPartReallyData(params) {
+  // console.log(params)
+  return function (dispatch) {
+    model.fetch({}, "".concat(_UrlList.getFileReallyDataUrl).concat(params), 'get', function (res) {
+      // console.log('datatrue', res)
+      var result = res.data;
+      dispatch(partReallyData(result));
+    }, function () {
+      console.log('获取零件信息失败！');
+    }, false);
+  };
+};
+
+exports.getPartReallyData = getPartReallyData;

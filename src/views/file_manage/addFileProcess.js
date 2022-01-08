@@ -61,6 +61,7 @@ class AddFilesProcess extends Component {
   //   for (var value of params.values()) {
   //     console.log(value);
   //  }
+    console.log('formData', formData)
     formData.append('fileId', fileId) 
     reqwest({
       url: originalUrl + uploadFilesUrl,
@@ -116,6 +117,7 @@ class AddFilesProcess extends Component {
   }
 
   render() {
+    const folderData = this.props
     const { current, preStepVisible } = this.state
     const steps = [
       {
@@ -136,7 +138,7 @@ class AddFilesProcess extends Component {
     ]
     return (
       <div>
-        { current === 0 ? 
+        { current === 0  && folderData['folderData'] !== 'folder' ? 
           <PageHeader
             onBack={() => this.comeBack()}
             title="返回"

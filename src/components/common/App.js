@@ -13,7 +13,8 @@ import NotMatch from './404';
 
 import '../../style/index.less';
 import MyHome from '../../views/my_home/index';
-import AddFolder from '../../views/my_home/add_folder';
+import AddFolder from '../../views/my_home/add_folder'; 
+import AddFolderData from '../../views/my_home/index';
 
 import DrawingManage from '../../views/drawing_manage';
 import AddDrawingProcess from '../../views/drawing_manage/addDrawProcess'
@@ -80,11 +81,12 @@ class App extends Component {
                 <Breadcrumb.Item>List</Breadcrumb.Item>
                 <Breadcrumb.Item>App</Breadcrumb.Item>
               </Breadcrumb> */}
-              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)',  marginTop: '4rem'}}>
+              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)',  marginTop: '4rem', width: '40%'}}>
                 <Switch>
                   <Route exact path={'/app'} render={props => <Index {...props} />} />
                   <Route exact path={'/app/my_home'} render={props => <MyHome {...props} />} />
                   <Route exact path={'/app/my_home/add_folder'} render={props => <AddFolder {...props} />} />
+                  <Route exact path={'/app/my_home/add_folder_context/:id'} render={props => <AddFolderData {...props} />} />
 
                   <Route exact path={'/app/part_manage'}  render={props => <PartManage {...props} />} />
                    <Route exact path={'/app/part_manage/add_part_process'} render={props => <AddPartProcess {...props} />} />
@@ -97,7 +99,7 @@ class App extends Component {
                                 
                   <Route exact path={'/app/program_manage'}  render={props => <ProgramManage {...props} />} />
                   <Route exact path={'/app/program_manage/program_creat'}render={props => <ProgramCreat {...props} />} />
-                  <Route exact path={'/app/program_manage/projectdata'} render={props => <ProjectData {...props} />} />
+                  <Route exact path={'/app/program_manage/projectdata/:id'} render={props => <ProjectData {...props} />} />
                   <Route exact path={'/app/program_manage/projectteam'} render={props => <ProjectTeam {...props} />} />
                   <Route exact path={ '/notFound' } render ={ props => <NotMatch {...props}/>} />
                 </Switch>

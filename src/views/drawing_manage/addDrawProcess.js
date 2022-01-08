@@ -64,8 +64,8 @@ class AddDrawingProcess extends Component {
 
    //创建新图纸描述信息
   createNewDrawing = (data, formData) => {
-    const me = this
-    console.log('newDraw', data)
+    let me = this
+    // console.log('newDraw', data)
     // for (let i in newDraw) {
     // // if (newDraw[i] === '' || newDraw[i] === undefined) {
     // //     message.error('信息未填写完整！')
@@ -93,7 +93,7 @@ class AddDrawingProcess extends Component {
   //   for (var value of params.values()) {
   //     console.log(value);
   //  }
-  const me = this
+  let me = this
     formData.append('fileId', drawId) 
     reqwest({
       url: originalUrl + uploadFilesUrl,
@@ -125,6 +125,7 @@ class AddDrawingProcess extends Component {
   }
 
   render() {
+    const folderData = this.props
     const { current, preStepVisible } = this.state
     const steps = [
       {
@@ -145,7 +146,7 @@ class AddDrawingProcess extends Component {
     ]
     return (
       <div>
-        { current === 0 ? 
+        { current === 0 && folderData['folderData'] !== 'folder' ? 
           <PageHeader
              onBack={() => this.comeBack()}
             title="返回"

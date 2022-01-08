@@ -18,7 +18,7 @@ class Uploads extends Component {
   };
 
   render() {
-    const {  fileList } = this.state;
+    const { fileList } = this.state;
     const props = {
       onRemove: file => {
         this.setState(state => {
@@ -40,10 +40,10 @@ class Uploads extends Component {
     };
 
     return (
-      <div style={{marginTop:'20px', textAlign:'left'}}>
-        <Upload {...props}  multiple>
+      <div style={{ marginTop: '20px', textAlign: 'left' }}>
+        <Upload {...props} multiple>
           <Button>
-            <Icon type="upload"/> 请选择文件
+            <Icon type="upload" /> 请选择文件
           </Button>
         </Upload>
         <div className="uploadButtons">
@@ -62,7 +62,7 @@ class Uploads extends Component {
           >
             完成
           </Button>
-          </div>
+        </div>
       </div>
     );
   }

@@ -40,7 +40,6 @@ class AddFile extends Component {
   componentDidMount() {
     store.dispatch(viewsAction.getAllProjects())
     store.dispatch(viewsAction.getAllParts())
-    store.dispatch(viewsAction.getAllFilesType())
     store.dispatch(viewsAction.getAllDrawings())  
   }
 
@@ -65,6 +64,7 @@ class AddFile extends Component {
           zss_id: this.state.zss_id,
           dss_type: this.state.dss_type
         }
+        // console.log('newFile', newFile)
         this.props.next(newFile)
       }
     })
@@ -100,7 +100,7 @@ class AddFile extends Component {
       const projectInfo = this.props.AllProjects.filter(item => {
         return item[key] === params[0].substring(0, 7)*1
       })
-      console.log('projectInfo', projectInfo)
+      // console.log('projectInfo', projectInfo)
       this.setState({
         project_code: projectInfo[0].id,
         dss_type: 'project'
@@ -124,7 +124,13 @@ class AddFile extends Component {
         part_code: partInfo[0].id,
         dss_type: 'part'
       })
-    } 
+    } else {
+      this.setState({
+        part_code: '',
+        project_code: '',
+        zss_id: ''
+      })
+    }
   }
 
   //取消创建
@@ -153,7 +159,7 @@ class AddFile extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { selectedItems, selectProjectItems, selectDrawItems } = this.state
+    const { selectedItems, selectProjectItems, selectDrawItems, part_code, project_code, zss_id } = this.state
     const { AllPartMes, AllProjects, newFilesData, allDrawings } = this.props
     const DRAWOPTIONS = this.handleData('drawing', allDrawings)
     const drawingFilterOptions = DRAWOPTIONS.filter(o => !selectDrawItems.includes(o))
@@ -174,15 +180,17 @@ class AddFile extends Component {
       <div>
         <Form  style={{marginTop:'30px'}} onSubmit={this.subFileMes}  { ...formItemLayout }>
           <Form.Item
-              label="文档名称"
-              colon
+            label="文档名称"
+            colon
           >
             {getFieldDecorator('name', {
               rules: [{ required: true, message: '输入相应的文件名称' }],
               initialValue: newFilesData.name 
             })(
                 <Input style={{ width: '300px', marginLeft: '30px' }}
-                  onChange={e => this.handChange('name', e.target.value)} allowClear />
+                onChange={e => this.handChange('name', e.target.value)} allowClear
+                autoComplete="off"
+              />
             )}
           </Form.Item>
 
@@ -193,8 +201,9 @@ class AddFile extends Component {
             <Select style={{ width: '300px', marginLeft: '30px' }}
               mode="multiple"
               placeholder="请选择所属的图纸"
-              initialvalue={ newFilesData.part_no }
+              // initialvalue={newFilesData.part_no}
               onChange={value => this.handleChange('drawingNo', value)}
+              disabled={ part_code !== '' || project_code !== '' ? true : false}
             >
               {drawingFilterOptions.map((item, index) => (
                 <Select.Option key={item} value={item}>
@@ -205,14 +214,15 @@ class AddFile extends Component {
           </Form.Item>
 
           <Form.Item
-              label="所属零件"
-              colon
+            label="所属零件"
+            colon
           >
             <Select style={{ width: '300px', marginLeft: '30px' }}
               mode="multiple"
               placeholder="请选择所属的零件"
               // initialvalue={ newFilesData.part_no }
               onChange={value => this.handleChange('partNo', value)}
+              disabled={ zss_id !== '' || project_code !== '' ? true : false}
             >
               {filteredOptions.map((item, index) => (
                 <Select.Option key={item} value={item}>
@@ -223,14 +233,15 @@ class AddFile extends Component {
           </Form.Item>
 
           <Form.Item
-              label="所属项目"
-              colon
+            label="所属项目"
+            colon
           >
             <Select style={{ width: '300px', marginLeft: '30px' }}
               mode="multiple"
               placeholder="请选择所属项目"
-              initialvalue={ newFilesData.project_no }
+              // initialvalue={ newFilesData.project_no }
               onChange={value => this.handleChange('project_no', value)}
+              disabled={ zss_id !== '' || part_code !== '' ? true : false}
             >
               {projectsFilteredOptions.map((item, index) => (
                 <Select.Option key={index} value={item}>
@@ -241,12 +252,13 @@ class AddFile extends Component {
           </Form.Item>
 
           <Form.Item
-              label="文档描述"
-              colon
+            label="文档描述"
+            colon
           >
             <TextArea style={{ width: '300px', marginLeft: '30px' }} rows={3}
-              initialvalue={ newFilesData.tag }
-              onChange={e => this.handChange('tag', e.target.value)}  />
+              defaultValue={ newFilesData.tag }
+              onChange={e => this.handChange('tag', e.target.value)}
+            />
           </Form.Item>
 
           <Form.Item>

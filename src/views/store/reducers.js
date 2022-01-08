@@ -11,7 +11,11 @@ const defaultState = fromJS({
   allFileTypeInfo: [],
   allDrawingsInfo: [],
   allDocumentsInfo: [],
-  partBomInfo: {}
+  partBomInfo: {},
+  part_datas: [],
+  addRelationParts: [],
+  deleteRelationParts: [],
+  AloneProjectAllInfo: []
 })
 
 export default (state = defaultState, action) => {
@@ -34,6 +38,14 @@ export default (state = defaultState, action) => {
       return state.set('allDocumentsInfo', fromJS(action.data))
     case constants.CREATEPARTBOM:
       return state.set('partBomInfo', fromJS(action.data))
+    case constants.SAVESEARCHPARTS:
+      return state.set('part_datas', fromJS(action.data))
+    case constants.SAVERELATIONPARTS:
+      return state.set('addRelationParts', fromJS(action.data))
+    case constants.SAVEDELETERELATIONPARTS:
+      return state.set('deleteRelationParts', fromJS(action.data))
+    case constants.ALONEPROJECTALLINFO:
+      return state.set('AloneProjectAllInfo', fromJS(action.data))
     default:
       return state
   }

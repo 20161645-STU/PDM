@@ -13,7 +13,7 @@ export default class AntdTable extends Component{
       data: [],
       currentPage: 1,
       total: 15,
-      isLoading: true
+      isLoading: false
     }
     this.onClick = this.props.rowClick  ? this.props.rowClick : function () {
       console.log('单击行事件')
@@ -21,15 +21,15 @@ export default class AntdTable extends Component{
     this.interval = null
   }
 
-  componentDidMount() {
-    if (this.props.onRef !== undefined) this.props.onRef(this)
-    this.setState({
-      currentPage: this.props.currentPage
-    })
-    if (this.props.rejectQueryInDidMount !== true) {
-      this.pageChange()
-    }
-  }
+  // componentDidMount() {
+  //   if (this.props.onRef !== undefined) this.props.onRef(this)
+  //   this.setState({
+  //     currentPage: this.props.currentPage
+  //   })
+  //   if (this.props.rejectQueryInDidMount !== true) {
+  //     this.pageChange()
+  //   }
+  // }
 
   setDataList = (params) => {
     console.log('params in AntdTable', params)
@@ -61,7 +61,8 @@ export default class AntdTable extends Component{
       function() {
         message.warning('加载失败，请重试')
       },
-      this.props.whetherTest
+      // this.props.whetherTest
+      false
     )
   }
 
@@ -116,8 +117,8 @@ export default class AntdTable extends Component{
     if (this.props.currentPage !== undefined) {
       lastCurrentPage = this.props.currentPage
     }
-    let lastPageChange = this.pageChange
-    if (this.props.pageChange !== undefined) lastData = this.props.pageChange
+    // let lastPageChange = this.pageChange
+    // if (this.props.pageChange !== undefined) lastData = this.props.pageChange
     return (
       <div style={{...this.props.style}}>
         <Table
@@ -132,17 +133,17 @@ export default class AntdTable extends Component{
           pagination={false}
           columns={columns}
           dataSource={lastData}
-          onRow={record => {
-            return {
-              onClick: event => this.onClick(record), // 点击行
-              onDoubleClick: event => {},
-              onContextMenu: event => {},
-              onMouseEnter: event => {}, // 鼠标移入行
-              onMouseLeave: event => {},
-            };
-          }}
+          // onRow={record => {
+          //   return {
+          //     onClick: event => this.onClick(record), // 点击行
+          //     onDoubleClick: event => {},
+          //     onContextMenu: event => {},
+          //     onMouseEnter: event => {}, // 鼠标移入行
+          //     onMouseLeave: event => {},
+          //   };
+          // }}
           loading={isLoading}
-          rowKey={'_id'}
+          // rowKey={'_id'}
         />
         <Pagination
           size="small"
@@ -150,7 +151,7 @@ export default class AntdTable extends Component{
           current={lastCurrentPage}
           total={total}
           pageSize={queryParams.pageSize !== undefined ? queryParams.pageSize : pageSize}
-          onChange={lastPageChange}
+          // onChange={lastPageChange}
           pageSizeOptions={['10','20','30','40',]}
           style={{marginTop: '1rem', marginBottom: '1rem'}}
         />

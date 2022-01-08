@@ -35,7 +35,7 @@ export default class SideMenu extends Component {
     return (
       <Menu
         mode="inline"
-        style={{ height: 'calc(100% - 3rem)', marginTop: '3rem', background: '#001529'}}
+        style={{ height: 'calc(100% - 3rem)', marginTop: '3rem', background: '#001529', position: 'fixed', width: 200}}
       >
         <Menu.ItemGroup
           style={{height: '100px'}}

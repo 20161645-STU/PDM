@@ -1,24 +1,24 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react'
 import './style.less'
-import { Button,Tree, message } from 'antd';
-import histroy from '../../components/common/history';
+import { Button,Tree, message } from 'antd'
+import histroy from '../../components/common/history'
 import { getUserName } from '../../publicFunction/index'
+
 
 import { connect } from 'react-redux';
 import {
   sentDetilType,
   storeProgramExpandedKeys,
-  storePragramSelectedkeys,
+  storePragramSelectedkeys
 } from '../../components/common/store/actionCreaters'
 
 import { Model } from '../../dataModule/testBone'
-import { getAloneProjectUrl, getProjectContentUrl } from '../../../src/dataModule/UrlList'
+import { getAloneProjectUrl } from '../../../src/dataModule/UrlList'
 
 import Folder from '../../publicComponents/IconFonts'
 
 import store from '../../store'
-import { actionCreators as viewsAction } from '../store';
-import { actionCreators as commonAction } from '../../components/common/store';
+import { actionCreators as viewsAction } from '../store'
 
 const model = new Model()
 const { TreeNode, DirectoryTree } = Tree;
@@ -28,13 +28,19 @@ class  ProgramManage extends Component {
     super (props);
     this.state = {
       projectsData: [],
-      detail_type: ''         //详情类型
+      detail_type: '',         //详情类型
     }
   }
 
-   //生命周期函数
+  //生命周期函数
   componentDidMount() {
     store.dispatch(viewsAction.getAllProjects())  
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.selectedKeys.selectedKeys !== nextProps.selectedKeys.selectedKeys) {
+      store.dispatch(viewsAction.getProjectContentId(nextProps.selectedKeys.selectedKeys))
+    }
   }
 
   //创建项目
@@ -50,38 +56,16 @@ class  ProgramManage extends Component {
     }
     else if (keys[0].substring(keys[0].length - 2, keys[0].length) === '01') {
       this.storeSelectedkeys({ selectedKeys: keys[0].substring(0, keys[0].length - 2) })
-      histroy.push('/app/program_manage/projectdata')
+      histroy.push('/app/program_manage/projectdata/'+keys[0].substring(0, keys[0].length - 2))
     } else if (keys[0].substring(keys[0].length - 2, keys[0].length) === '02') {
       this.storeSelectedkeys({ selectedKeys: keys[0].substring(0, keys[0].length - 2) })
       histroy.push('/app/program_manage/projectteam')
     } else {
       this.getAloneProject(keys[0])
-      this.getProjectContentId({ id: keys[0] })
       this.storeSelectedkeys({  selectedKeys: keys[0] })
     }
   }
 
-  //获取项目所有内容的id
-  getProjectContentId = (params) => {
-    model.fetch(
-      {folder_id: params.id},
-      getProjectContentUrl,
-      'get',
-      function (res) {
-        console.log('id', res.data)
-        if (res.data.length !== 0) {
-          store.dispatch(commonAction.getFolderContentId('project', res.data)) 
-        } else {
-          store.dispatch(commonAction.sentFoldersContent('project', [])) 
-        }
-      },
-      function () {
-        // console.log(111)
-        // message.error('获取文件夹内容失败！')
-      },
-      false
-    )
-  }
 
   // 获得单个项目的详细信息
   getAloneProject = (params) => {
@@ -95,7 +79,7 @@ class  ProgramManage extends Component {
           me.sentProjectMes( res.data)
       },
       function (error) {
-          message.error('获取图纸信息失败！')
+          message.error('获取图纸信息失败!')
       },
       false
     )
@@ -130,7 +114,6 @@ class  ProgramManage extends Component {
   }
 
   //数据处理
-   
   handleData = (key, params) => {
     if (key === 'mine') {
       const myProjectsData = params.filter(item => item.admin === getUserName())
@@ -213,7 +196,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     sendTypeMes: data => dispatch(sentDetilType(data)),
     storeExpandedKeys: data => dispatch(storeProgramExpandedKeys(data)),
-    storeSelectedkeys: data => dispatch(storePragramSelectedkeys(data))
+    storeSelectedkeys: data => dispatch(storePragramSelectedkeys(data)),
   }
 }
 

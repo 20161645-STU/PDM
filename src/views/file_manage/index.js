@@ -135,7 +135,7 @@ class FileManage extends Component {
           <TreeNode title="我的文档" key="0">
             {myFilesData.length !== 0 ? myFilesData.map((item) => {
               return (
-                <TreeNode title={item.documentNo + '-' + item.name + '/' + item.version} key={item.id} isLeaf
+                <TreeNode title={item.documentNo + '-' + item.name } key={item.id} isLeaf
                   icon={<Folder type="icon-wendang" style={{ fontSize: '18px', paddingRight: '4px' }} />}
                 />
               )
@@ -144,7 +144,7 @@ class FileManage extends Component {
           <TreeNode title="其他文档" key="1">
             {otherFilesData.length !== 0 ? otherFilesData.map((item) => {
               return (
-                <TreeNode title={item.documentNo + '-' + item.name  + '/' + item.version} key={item.id} isLeaf
+                <TreeNode title={item.documentNo + '-' + item.name  } key={item.id} isLeaf
                   icon={<Folder type="icon-wendang" style={{ fontSize: '18px', paddingRight: '4px' }} />}
                 />
               )

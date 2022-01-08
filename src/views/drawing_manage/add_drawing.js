@@ -37,6 +37,7 @@ class AddDrawing extends Component {
       part_code: '',
       project_code: '',
       zss_type: '',
+      type: 'draw'
     }
   }
   
@@ -66,6 +67,7 @@ class AddDrawing extends Component {
           part_code: this.state.part_code,
           project_code: this.state.project_code,
           zss_type: this.state.zss_type,
+          type: 'draw'
         }
         this.props.next(newDrawing)
       }
@@ -81,14 +83,14 @@ class AddDrawing extends Component {
     this.setState(newDrawsData)
   }
 
-    //恢复初始化 
+  //恢复初始化 
   initState = () => {
     const initData = {}
     const newDrawing = this.state
     for (let i in newDrawing) {
         initData[i] = ''
     }
-    initData['part_no'] = 0
+    initData['type'] = 'draw'
     initData['is_frozen'] = '0'
     initData['is_reviewed'] = '0'
     initData['version'] = '1'
@@ -175,7 +177,7 @@ class AddDrawing extends Component {
               // initialValue: name
             })(
               <Input style={{ width: '300px' }} 
-              onChange={e => this.handChange('name', e.target.value)} allowClear />
+              onChange={e => this.handChange('name', e.target.value)} allowClear autoComplete='off' />
             )}
           </Form.Item>
 

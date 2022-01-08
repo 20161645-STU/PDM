@@ -26,7 +26,6 @@ class MRoute extends Component {
           <Route exact path="/" component={Home} />
           <Route path="/app" component={App} />
           <Route path="/login" component={Login} />
-
           <Route component={NoMatch} />
         </Switch>
       </Router>

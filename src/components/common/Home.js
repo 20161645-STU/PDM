@@ -15,7 +15,7 @@ export default class Home extends Component {
         return (
             getCookie("mspa_user") === null ?
                 <Redirect to="/login" /> :
-                <Redirect to="/app" />
+                <Redirect to="/app/my_home" />
         )
     }
 }

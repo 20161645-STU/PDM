@@ -2,7 +2,16 @@ import * as constants from './constants'
 import { fromJS } from 'immutable'
 
 import { Model } from '../../dataModule/testBone'
-import { getAllProjectUrl, getAllPartsUrl, documentTypeUrl, getAllDrawsUrl, getAllDocumentsUrl } from '../../dataModule/UrlList'
+import {
+  getAllProjectUrl,
+  getAllPartsUrl,
+  documentTypeUrl,
+  getAllDrawsUrl,
+  getAllDocumentsUrl,
+  getProjectContentUrl
+} from '../../dataModule/UrlList'
+
+import { getFolderContentId } from '../../publicFunction/index'
 const model = new Model();
 
 // import { Route } from 'react-router-dom'
@@ -40,7 +49,6 @@ const AllProjectsInfo = (result) => ({
   data: result
 })
 
-
 export const getAllProjects = () => {
   return (dispatch) => {
     model.fetch(
@@ -59,6 +67,47 @@ export const getAllProjects = () => {
   )
   }
 }
+
+//储存项目里面的所有数据信息
+const AloneProjectAllInfo = (result) => ({
+  type: constants.ALONEPROJECTALLINFO,
+  data: result
+})
+
+//获取项目所有内容的id
+export const getProjectContentId = (params) => {
+  return (dispath) => {
+    let me = this
+    model.fetch(
+      { folder_id: params },
+      getProjectContentUrl,
+      'get',
+      function (res) {
+        me.handleContentId(res.data).then(res => {
+          // console.log('projectContentData', res)
+          dispath(AloneProjectAllInfo(res))
+        })
+      },
+      function () {
+        // console.log(111)
+        // message.error('获取文件夹内容失败！')
+      },
+      false
+    )
+  }
+}
+
+//对项目内容id循环获取具体数据
+export const handleContentId = async (params) => {
+  const projectContentData = []
+  for (let i = 0; i < params.length; i++) {
+    projectContentData.push(await getFolderContentId(params[i]))
+  }
+  // console.log('projectContentData', projectContentData)
+  return Promise.all(projectContentData)
+}
+
+
 
 //或得所有零件信息
 const AllPartsInfo = (result) => ({
@@ -188,5 +237,25 @@ export const createPartBom = data => ({
   type: constants.CREATEPARTBOM,
   data: fromJS(data)
 })
+
+//存储创建bom的搜索零件
+export const saveSearchParts = data => ({
+  type: constants.SAVESEARCHPARTS,
+  data: fromJS(data)
+})
+
+//存储要添加bom关系的零件
+export const saveRleationParts = data => ({
+  type: constants.SAVERELATIONPARTS,
+  data: fromJS(data)
+})
+
+//存储要删除bom的零件
+export const saveDelteRleationParts = data => ({
+  type: constants.SAVEDELETERELATIONPARTS,
+  data: fromJS(data)
+})
+
+
 
 

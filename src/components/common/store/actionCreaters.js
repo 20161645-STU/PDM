@@ -1,20 +1,17 @@
 import * as constants from './constants'
 import { fromJS } from 'immutable'
-import store from '../../../store'
 
 import { Model } from '../../../dataModule/testBone'
 import {
-  getAloneDrawUrl,
-  getAlonePartUrl,
-  getAloneDocumentUrl,
-  getAloneProjectUrl,
-  getAloneFolderUrl,
   getFileFaRelationUrl,
   getDrawFaRelationUrl,
   getDrawSonRelationUrl,
   getFileReallyDataUrl,
   getPartSonRelationUrl,
+  getPartFaRelationUrl
 } from '../../../dataModule/UrlList'
+
+
 const model = new Model()
 
 // export const dispatchBreadcrumbList = (data) => ({
@@ -96,123 +93,16 @@ export const storeFolderSelectedkeys = data => ({
 
 
 //文件夹所有数据
-const folderDatas = (result) => ({
+export const storeFolderAllDatas = (result) => ({
   type: constants.FOLDERCONTENTDATA,
   data: result
 })
 
 //项目所有数据
-const projectAllDatas = (result) => ({
+export const storeProjectAllDatas = (result) => ({
   type: constants.PROJECTCONTENTDATA,
   data: result
 })
-
-export const sentFoldersContent = (key, params) => {
-  if (key === 'folder') {
-    return(dispatch) => {
-      // console.log('datas', params)
-      dispatch(folderDatas(params))
-    }
-  } else if (key === 'project') {
-    return(dispatch) => {
-      console.log('project_datas', params)
-      dispatch(projectAllDatas(params))
-    }
-  }
-}
-
-
-//根据id去获取文件夹或项目里的具体内容
-export const getFolderContentId = (key, params) => {
-  // console.log('params', params)
-  const folderContentData = []
-  for (let i = 0; i < params.length; i++) {
-    if (params[i].relationType === 'folder_own_zss' || params[i].relationType === 'project_own_zss') {
-      model.fetch(
-        { id: params[i].target },
-        getAloneDrawUrl,
-        'get',
-        function (res) {
-          folderContentData.push(res.data)
-          if (i === params.length - 1) {
-            store.dispatch(sentFoldersContent(key, folderContentData))
-          }
-        },
-        function () {
-          console.log('error')
-        },
-        false
-      )
-    } else if (params[i].relationType === 'folder_own_tss' || params[i].relationType === 'project_own_tss') {
-      model.fetch(
-        { id: params[i].target },
-        getAlonePartUrl,
-        'get',
-        function (res) {
-          folderContentData.push(res.data)
-          if (i === params.length - 1) {
-            store.dispatch(sentFoldersContent(key, folderContentData))
-          }
-        },
-        function () {
-          console.log('error')
-        },
-        false
-      )
-    } else if (params[i].relationType === 'folder_own_dss' || params[i].relationType === 'project_own_dss') {
-      model.fetch(
-        { id: params[i].target },
-        getAloneDocumentUrl,
-        'get',
-        function (res) {
-          folderContentData.push(res.data)
-          if (i === params.length - 1) {
-            store.dispatch(sentFoldersContent(key, folderContentData))
-          }
-        },
-        function () {
-          console.log('error')
-        },
-        false
-      )
-    } else if (params[i].relationType === 'folder_own_project' || params[i].relationType === 'project_own_project') {
-      model.fetch(
-        { id: params[i].target },
-        getAloneProjectUrl,
-        'get',
-        function (res) {
-          // console.log(555511, res.data)
-          folderContentData.push(res.data)
-          if (i === params.length - 1) {
-            store.dispatch(sentFoldersContent(key, folderContentData))
-          }
-        },
-        function () {
-          console.log('error')
-        },
-        false
-      )
-    } else if (params[i].relationType === 'folder_own_folder' || params[i].relationType === 'project_own_folder') {
-        model.fetch(
-          { id: params[i].target },
-          getAloneFolderUrl,
-          'get',
-          function (res) {
-            // console.log(66667777, res.data)
-            folderContentData.push(res.data)
-            if (i === params.length - 1) {
-              store.dispatch(sentFoldersContent(key, folderContentData))
-            }
-          },
-          function () {
-            console.log('error')
-          },
-          false
-        )
-    }
-  } 
-}
-
 
 
 //文档关联数据
@@ -294,6 +184,34 @@ export const getDrawSonRelations = (params) => {
 }
 
 
+//获取零件父关联数据
+const partFaRelationInfo = (result) => ({
+  type: constants.PARTFARELATIONDATA,
+  data: result
+})
+
+//获取零件的父关联数据
+export const getPartFaRelations = (params) => {
+  return (dispatch) => {
+    model.fetch(
+      {target: params},
+      getPartFaRelationUrl,
+      'get',
+      function (res) {
+        // console.log('父关联数据', res.data)
+        const result = res.data
+        dispatch(partFaRelationInfo(result))
+      },
+      function () {
+        console.log('获取零件关联信息失败！')
+      },
+      false
+    )
+  }
+}
+
+
+
 //获取零件子关联数据
 const partSonRelationInfo = (result) => ({
   type: constants.PARTSONRELATIONDATA,
@@ -336,6 +254,12 @@ export const storeZssRelationInfo = data => ({
 //存储零件关联数据
 export const storeTssRelationInfo = data => ({
   type: constants.TSSRELATIONINFO,
+  data: fromJS(data)
+})
+
+//存储项目关联数据
+export const storeProjectRelationInfo = data => ({
+  type: constants.PROJECTRELATIONINFO,
   data: fromJS(data)
 })
 
@@ -382,12 +306,40 @@ export const getDrawReallyData = (params) => {
       `${getFileReallyDataUrl}${params}`,
       'get',
       function (res) {
-        console.log('datatrue', res)
+        // console.log('datatrue', res)
         const result = res.data
         dispatch(drawReallyData(result))
       },
       function () {
         console.log('获取图纸信息失败！')
+      },
+      false
+    )
+  }
+}
+
+
+//获取零件真实数据
+const partReallyData = (result) => ({
+  type: constants.PARTREALLYDATA,
+  data: result
+})
+
+//获取零件magodb的数据
+export const getPartReallyData = (params) => {
+  // console.log(params)
+  return (dispatch) => {
+    model.fetch(
+      {},
+      `${getFileReallyDataUrl}${params}`,
+      'get',
+      function (res) {
+        // console.log('datatrue', res)
+        const result = res.data
+        dispatch(partReallyData(result))
+      },
+      function () {
+        console.log('获取零件信息失败！')
       },
       false
     )

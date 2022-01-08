@@ -1,6 +1,15 @@
 import {getCookie} from "../helpers/cookies";
 import createBrowserHistory from '../components/common/history'
-import {message} from "antd";
+import { message } from "antd";
+import {
+  getAloneDrawUrl,
+  getAlonePartUrl,
+  getAloneDocumentUrl,
+  getAloneProjectUrl,
+  getAloneFolderUrl,
+} from '../dataModule/UrlList'
+import { Model } from '../dataModule/testBone'
+const model = new Model()
 
 export function nowTime() {
   const date = new Date();
@@ -57,4 +66,86 @@ export function ejectMessage (text, type) {
   } else {
     message.info(text)
   }
+}
+
+//根据id去获取文件夹或项目里的具体内容
+export const getFolderContentId = function (params) {
+  // console.log('params', params)
+  return new Promise((resolve, reject) => {
+    if (params.relationType === 'folder_own_zss' || params.relationType === 'project_own_zss') {
+      model.fetch(
+        {id: params.target},
+        getAloneDrawUrl,
+        'get',
+        function (res) {
+          // console.log(res.data)
+          resolve(res.data)
+        },
+        function(err) {
+          reject(err)
+        },
+        false
+      )
+    }
+    else if (params.relationType === 'folder_own_tss' || params.relationType === 'project_own_tss') {
+      model.fetch(
+        {id: params.target},
+        getAlonePartUrl,
+        'get',
+        function (res) {
+          // console.log(res.data)
+          resolve(res.data)
+        },
+        function(err) {
+          reject(err)
+        },
+        false
+      )
+    }
+    else if (params.relationType === 'folder_own_dss' || params.relationType === 'project_own_dss') {
+      model.fetch(
+        {id: params.target},
+        getAloneDocumentUrl,
+        'get',
+        function (res) {
+          // console.log(res.data)
+          resolve(res.data)
+        },
+        function(err) {
+          reject(err)
+        },
+        false
+      )
+    }
+    else if (params.relationType === 'folder_own_project' || params.relationType === 'project_own_project') {
+      model.fetch(
+        {id: params.target},
+        getAloneProjectUrl,
+        'get',
+        function (res) {
+          // console.log(res.data)
+          resolve(res.data)
+        },
+        function(err) {
+          reject(err)
+        },
+        false
+      )
+    }
+    else if (params.relationType === 'folder_own_folder' || params.relationType === 'project_own_folder') {
+      model.fetch(
+        {id: params.target},
+        getAloneFolderUrl,
+        'get',
+        function (res) {
+          // console.log(res.data)
+          resolve(res.data)
+        },
+        function(err) {
+          reject(err)
+        },
+        false
+      )
+    }
+  })
 }

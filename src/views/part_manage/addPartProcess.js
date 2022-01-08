@@ -28,7 +28,7 @@ class AddFilesProcess extends Component {
   next = (params) => {
     const current = this.state.current + 1;
     this.setState({ current });
-    console.log(params)
+    // console.log(params)
     this.props.creatNewParts(params)
     this.setState({
       preStepVisible: true
@@ -97,6 +97,7 @@ class AddFilesProcess extends Component {
       createPartUrl,
       'post',
       function (res) {
+        // console.log(999, res)
         message.success('创建零件成功！')
         me.sentFilesDocuemnts(res.data, formData)
       },
@@ -114,6 +115,7 @@ class AddFilesProcess extends Component {
   }
 
   render() {
+    const folderData = this.props
     const { current, preStepVisible } = this.state
     const steps = [
       {
@@ -134,7 +136,7 @@ class AddFilesProcess extends Component {
     ]
     return (
       <div>
-        { current === 0 ? 
+        { current === 0 && folderData['folderData'] !== 'folder' ? 
           <PageHeader
             onBack={() => this.comeBack()}
             title="返回"

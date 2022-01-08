@@ -1,8 +1,8 @@
 import { fromJS } from 'immutable'
 import * as constants from './constants'
-
+// const projectContentData = sessionStorage.getItem('projectContentData') ? sessionStorage.getItem('projectContentData') : []
 const defaultState = fromJS({
-  detil_mes: {},
+  detil_mes: [],
   drawExpandedKeys: {},
   drawSelectedkeys: {},
   partExpandedKeys: {},
@@ -18,12 +18,15 @@ const defaultState = fromJS({
   fileRelationData: [],
   drawFaRelationInfo: [],
   drawSonRelationData: [],
+  partFaRelationData: [],
   partSonRelationData: [],
   dssRelationInfo: [],
   zssRelationInfo: [],
   tssRelationInfo: [],
+  projectRelationInfo: [],
   fileReallyData: [],
   drawReallyData: [],
+  partReallyData: []
 })
 
 export default (state = defaultState, action) => {
@@ -60,6 +63,8 @@ export default (state = defaultState, action) => {
       return state.set('drawFaRelationInfo', fromJS(action.data))
     case constants.DRAWSONRELATIONDATA:
       return state.set('drawSonRelationData', fromJS(action.data))
+    case constants.PARTFARELATIONDATA:
+      return state.set('partFaRelationData', fromJS(action.data))
     case constants.PARTSONRELATIONDATA:
       return state.set('partSonRelationData', fromJS(action.data))
     case constants.DSSRELATIONINFO:
@@ -68,10 +73,14 @@ export default (state = defaultState, action) => {
       return state.set('zssRelationInfo', fromJS(action.data))
     case constants.TSSRELATIONINFO:
       return state.set('tssRelationInfo', fromJS(action.data))
+    case constants.PROJECTRELATIONINFO:
+      return state.set('projectRelationInfo', fromJS(action.data))
     case constants.FILEREALLYDATA:
       return state.set('fileReallyData', fromJS(action.data))
     case constants.DRAWREALLYDATA:
       return state.set('drawReallyData', fromJS(action.data))
+    case constants.PARTREALLYDATA:
+      return state.set('partReallyData', fromJS(action.data))
     default:
       return state
   }

@@ -15,8 +15,9 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+// const projectContentData = sessionStorage.getItem('projectContentData') ? sessionStorage.getItem('projectContentData') : []
 var defaultState = (0, _immutable.fromJS)({
-  detil_mes: {},
+  detil_mes: [],
   drawExpandedKeys: {},
   drawSelectedkeys: {},
   partExpandedKeys: {},
@@ -32,12 +33,15 @@ var defaultState = (0, _immutable.fromJS)({
   fileRelationData: [],
   drawFaRelationInfo: [],
   drawSonRelationData: [],
+  partFaRelationData: [],
   partSonRelationData: [],
   dssRelationInfo: [],
   zssRelationInfo: [],
   tssRelationInfo: [],
+  projectRelationInfo: [],
   fileReallyData: [],
-  drawReallyData: []
+  drawReallyData: [],
+  partReallyData: []
 });
 
 var _default = function _default() {
@@ -93,6 +97,9 @@ var _default = function _default() {
     case constants.DRAWSONRELATIONDATA:
       return state.set('drawSonRelationData', (0, _immutable.fromJS)(action.data));
 
+    case constants.PARTFARELATIONDATA:
+      return state.set('partFaRelationData', (0, _immutable.fromJS)(action.data));
+
     case constants.PARTSONRELATIONDATA:
       return state.set('partSonRelationData', (0, _immutable.fromJS)(action.data));
 
@@ -105,11 +112,17 @@ var _default = function _default() {
     case constants.TSSRELATIONINFO:
       return state.set('tssRelationInfo', (0, _immutable.fromJS)(action.data));
 
+    case constants.PROJECTRELATIONINFO:
+      return state.set('projectRelationInfo', (0, _immutable.fromJS)(action.data));
+
     case constants.FILEREALLYDATA:
       return state.set('fileReallyData', (0, _immutable.fromJS)(action.data));
 
     case constants.DRAWREALLYDATA:
       return state.set('drawReallyData', (0, _immutable.fromJS)(action.data));
+
+    case constants.PARTREALLYDATA:
+      return state.set('partReallyData', (0, _immutable.fromJS)(action.data));
 
     default:
       return state;

@@ -159,7 +159,7 @@ class AddPart extends Component {
               rules: [{ required: true, message: '输入相应的零件名称' }],
             })(
               <Input style={{ width: '300px' }}
-                onChange={e => this.handChange('name', e.target.value)} allowClear />
+                onChange={e => this.handChange('name', e.target.value)} allowClear autoComplete='off'/>
             )}
           </Form.Item>
                    

@@ -57,7 +57,7 @@ class DrawingManage extends Component {
       getAloneDrawUrl,
       'get',
       function (res) {
-        console.log(111, res.data)
+        // console.log(111, res.data)
         me.sentDrawMes( res.data)
       },
       function (error) {

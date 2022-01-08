@@ -42,8 +42,12 @@ class PartManage extends Component {
       getAlonePartUrl,
       'get',
       function (res) {
-          // console.log(111, res.data)
-          me.sentPartMes( res.data)
+        // console.log(111, res.data)
+        me.sentPartMes(res.data)
+        me.props.createPartBom({
+          type: '',
+          partId: ''
+        })
       },
       function (error) {
           message.error('获取零件信息失败！')
@@ -58,7 +62,7 @@ class PartManage extends Component {
     if (keys[0] === '0' || keys[0] === '1') {
         // console.log('id', keys);
     } else if (keys[0].substring(keys[0].length - 3, keys[0].length) === 'bom') {
-      this.props.sendTypeMes({})
+      // this.props.sendTypeMes({})
       this.props.createPartBom({
         type: 'BOM',
         partId: keys[0].substring(0, keys[0].length -3)

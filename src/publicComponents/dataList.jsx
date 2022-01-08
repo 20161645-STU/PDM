@@ -19,12 +19,13 @@ class DataList extends Component{
 
   //下载数据
   uploadFilesData = () => {
-    const params = this.props.fileReallyData[0].fileId
+    const params = this.props.data[0].fileId
     window.location.href=`${originalUrl}${uploadDownFileUrl}${params}`
   }
 
+
   render() {
-    const datas = this.props.fileReallyData
+    const datas = this.props.data
     // console.log('fileReallyData', datas)
     return (
       <div style={{marginTop:'20px'}}>
@@ -44,7 +45,7 @@ class DataList extends Component{
                   </div>
                 }</List.Item>
               )
-            }else if (item.suffix === '.xlsx') {
+            }else if (item.suffix === '.xlsx' || item.suffix === '.xls') {
               return (
                 <List.Item>{
                   <div key={item.id} style={{ height: '24px', marginLeft: '40px', marginBottom:'10px'  }}>
@@ -56,11 +57,23 @@ class DataList extends Component{
                 }</List.Item>
               )
             }
-            else if (item.suffix === '.doc' || item.suffix === '.docx') {
+            else if (item.suffix === '.doc' || item.suffix === '.docx' ) {
               return (
                 <List.Item>{
                   <div key={item.id} style={{ height: '24px', marginLeft: '40px', marginBottom:'10px'  }}>
                     <Folder type="icon-docx" style={{ fontSize: '24px', paddingRight: '4px', marginTop:'6px'}} />
+                    <span style={{ width: '60px', fontSize: '16px', marginLeft: '10px' }}>
+                      {item.name}
+                    </span>
+                  </div>
+                }</List.Item>
+              )
+            }
+            else if (item.suffix === '.pdf') {
+              return (
+                <List.Item>{
+                  <div key={item.id} style={{ height: '24px', marginLeft: '40px', marginBottom:'10px'  }}>
+                    <Folder type="icon-PDF" style={{ fontSize: '24px', paddingRight: '4px', marginTop:'6px'}} />
                     <span style={{ width: '60px', fontSize: '16px', marginLeft: '10px' }}>
                       {item.name}
                     </span>
@@ -79,7 +92,31 @@ class DataList extends Component{
                   </div>
                 }</List.Item>
               )
-            }    
+            }
+            else if (item.suffix === '.dwg' || item.suffix === '.SLDDRW') {
+              return (
+                <List.Item>{
+                  <div key={item.id} style={{ height: '24px', marginLeft: '40px', marginBottom:'10px'  }}>
+                    <Folder type="icon-draw" style={{ fontSize: '20px', paddingRight: '4px', marginTop:'6px'}} />
+                    <span style={{ width: '60px', fontSize: '16px', marginLeft: '10px' }}>
+                      {item.name}
+                    </span>
+                  </div>
+                }</List.Item>
+              )
+            }
+            else if (item.suffix === '.SLDASM' || item.suffix === '.SLDPRT') {
+              return (
+                <List.Item>{
+                  <div key={item.id} style={{ height: '24px', marginLeft: '40px', marginBottom:'10px'  }}>
+                    <Folder type="icon-solidworks" style={{ fontSize: '20px', paddingRight: '4px', marginTop:'6px'}} />
+                    <span style={{ width: '60px', fontSize: '16px', marginLeft: '10px' }}>
+                      {item.name}
+                    </span>
+                  </div>
+                }</List.Item>
+              )
+            }
             else {
               return (
                 <List.Item>{<span style={{fontSize: '16px'}}>没有数据</span> }</List.Item>
@@ -99,6 +136,7 @@ class DataList extends Component{
 const mapStateToProps = (state) => {
   return {
     fileReallyData: state.get('commonReducer').get('fileReallyData').toJS(),
+    drawReallyData: state.get('commonReducer').get('drawReallyData').toJS(),
   }
 }
 
